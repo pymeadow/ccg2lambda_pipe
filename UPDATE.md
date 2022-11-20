@@ -60,8 +60,8 @@ ls -alt
 21217 coqlib.vo
 1316  .coqlib.vo.aux
 
-cat datasets/sentences.txt | sed -f en/tokenizer.sed > datasets/sentences.tok
-./candc-1.00/bin/candc --models candc-1.00/models --candc-printer xml --input datasets/sentences.tok > datasets/sentences.candc.xml
+cat datasets/corpus_test/sentences.txt | sed -f en/tokenizer.sed > datasets/corpus_test/sentences.tok
+./candc-1.00/bin/candc --models candc-1.00/models --candc-printer xml --input datasets/corpus_test/sentences.tok > datasets/corpus_test/sentences.candc.xml
 
 1 parsed at B=0.075, K=20
 1 coverage 100%
@@ -73,20 +73,20 @@ cat datasets/sentences.txt | sed -f en/tokenizer.sed > datasets/sentences.tok
 3 coverage 100%
 3 stats 3.09104 93 110
 
-python3 en/candc2transccg.py datasets/sentences.candc.xml > datasets/sentences.xml
+python3 en/candc2transccg.py datasets/corpus_test/sentences.candc.xml > datasets/corpus_test/sentences.xml
 
-python3 scripts/semparse.py datasets/sentences.xml en/semantic_templates_en_emnlp2015.yaml datasets/sentences.sem.xml
+python3 scripts/semparse.py datasets/corpus_test/sentences.xml en/semantic_templates_en_emnlp2015.yaml datasets/corpus_test/sentences.sem.xml
 ```
 
-## 2.2 Sentence Entailment
+## 2.2 Textual Entailment
 
 ```
-python3 scripts/prove.py datasets/sentences.sem.xml --graph_out datasets/graphdebug.html
+python3 scripts/prove.py datasets/corpus_test/sentences.sem.xml --graph_out datasets/corpus_test/graphdebug.html
 
 ```
 
-## 2.3 Parsing Visualization
+## 2.3 Parse Tree Visualization
 
 ```
-python3 scripts/visualize.py datasets/sentences.xml > datasets/sentences.html
+python3 scripts/visualize.py datasets/corpus_test/sentences.xml > datasets/corpus_test/sentences.html
 ```
