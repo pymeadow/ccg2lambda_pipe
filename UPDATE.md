@@ -1,6 +1,6 @@
 # 1 Installation
 
-* WSL Ubuntu 18.04
+* Ubuntu 18.04
 * Python 3.10.8
 * pip 22.2.2
 
@@ -74,6 +74,8 @@ cat datasets/sentences.txt | sed -f en/tokenizer.sed > datasets/sentences.tok
 3 stats 3.09104 93 110
 
 python3 en/candc2transccg.py datasets/sentences.candc.xml > datasets/sentences.xml
+
+python3 scripts/semparse.py datasets/sentences.xml en/semantic_templates_en_emnlp2015.yaml datasets/sentences.sem.xml
 ```
 
 ## 2.2 Sentence Entailment
@@ -83,7 +85,7 @@ python3 scripts/prove.py datasets/sentences.sem.xml --graph_out datasets/graphde
 
 ```
 
-## 2.3 Visualization
+## 2.3 Parsing Visualization
 
 ```
 python3 scripts/visualize.py datasets/sentences.xml > datasets/sentences.html

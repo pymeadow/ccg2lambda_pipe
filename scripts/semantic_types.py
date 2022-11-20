@@ -22,7 +22,6 @@ import logging
 import re
 
 from nltk import Tree
-from nltk.compat import string_types
 from nltk.sem.logic import ENTITY_TYPE
 from nltk.sem.logic import TRUTH_TYPE
 from nltk.sem.logic import EVENT_TYPE
@@ -440,7 +439,7 @@ def remove_labels_and_unaries(tree):
     return str(tree)
 
 def read_type(type_string):
-    assert isinstance(type_string, string_types)
+    assert isinstance(type_string, str)
     type_string = type_string.replace(' ', '') #remove spaces
 
     if type_string[0] == '<':
