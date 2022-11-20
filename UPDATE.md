@@ -50,43 +50,33 @@ Setting en/parser_location.txt pointing to .../ccg2lambda_pipe/candc-1.00
 
 # 2 Validation Tests
 
-## 2.1 Semantic Analysis
+## 2.1 Compile COQ tactics
 
 ```
 coqc coqlib.v
 
-ls -alt
 12146 coqlib.glob
 21217 coqlib.vo
 1316  .coqlib.vo.aux
-
-cat datasets/corpus_test/sentences.txt | sed -f en/tokenizer.sed > datasets/corpus_test/sentences.tok
-./candc-1.00/bin/candc --models candc-1.00/models --candc-printer xml --input datasets/corpus_test/sentences.tok > datasets/corpus_test/sentences.candc.xml
-
-1 parsed at B=0.075, K=20
-1 coverage 100%
-1 stats 4.54329 232 296
-2 parsed at B=0.075, K=20
-2 coverage 100%
-2 stats 3.61092 99 119
-3 parsed at B=0.075, K=20
-3 coverage 100%
-3 stats 3.09104 93 110
-
-python3 en/candc2transccg.py datasets/corpus_test/sentences.candc.xml > datasets/corpus_test/sentences.xml
-
-python3 scripts/semparse.py datasets/corpus_test/sentences.xml en/semantic_templates_en_emnlp2015.yaml datasets/corpus_test/sentences.sem.xml
 ```
 
 ## 2.2 Textual Entailment
 
-```
-python3 scripts/prove.py datasets/corpus_test/sentences.sem.xml --graph_out datasets/corpus_test/graphdebug.html
+Run the pipeline on the test corpus to reproduce the results in [README.md](./README.md):
 
 ```
+pipelines/pipeline.bash datasets/corpus_test/sentences.txt
+yes
+```
 
-## 2.3 Parse Tree Visualization
+Run the pipeline on 3 Stanford NLI sentence pairs:
 
 ```
-python3 scripts/visualize.py datasets/corpus_test/sentences.xml > datasets/corpus_test/sentences.html
+pipelines/pipeline.bash datasets/corpus_snli/sentences_entail.txt
+unknown
+pipelines/pipeline.bash datasets/corpus_snli/sentences_neutral.txt
+unknown
+pipelines/pipeline.bash datasets/corpus_snli/sentences_contrad.txt
+unknown
 ```
+
