@@ -22,7 +22,8 @@ source ../../py_environs/ccg2lambda/bin/activate
 
 pip3 install -r requirements.txt
 
-python3 -c "import nltk; nltk.download('wordnet')"
+# download wordnet and punckt for English tokenization
+python3 -c "import nltk; nltk.download('wordnet'); nltk.download('punkt')"
 cd ~/nltk_data/corpora
 /usr/bin/unzip wordnet.zip
 
@@ -40,6 +41,13 @@ sudo apt-get install coq
 coqc --version
 The Coq Proof Assistant, version 8.6 (October 2017)
 compiled on Oct 28 2017 14:23:55 with OCaml 4.05.0
+
+# compile the tactics for textual entailment
+coqc coqlib.v
+
+12146 coqlib.glob
+21217 coqlib.vo
+1316  .coqlib.vo.aux
 ```
 
 ## 1.4 Install C&C Parser
@@ -49,18 +57,6 @@ Setting en/parser_location.txt pointing to .../ccg2lambda_pipe/candc-1.00
 ```
 
 # 2 Validation Tests
-
-## 2.1 Compile COQ tactics
-
-```
-coqc coqlib.v
-
-12146 coqlib.glob
-21217 coqlib.vo
-1316  .coqlib.vo.aux
-```
-
-## 2.2 Textual Entailment
 
 Run the pipeline on the test corpus to reproduce the results in [README.md](./README.md):
 

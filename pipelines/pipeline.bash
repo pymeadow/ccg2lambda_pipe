@@ -7,7 +7,7 @@ input_dir=$(dirname $INPUT_PATH)
 input_file=$(basename $INPUT_PATH .txt)
 
 token_file=$input_dir/$input_file.tok
-cat $INPUT_PATH | sed -f en/tokenizer.sed > $token_file
+cat $INPUT_PATH | python3 en/tokenizer.py > $token_file
 
 candc_xml=$input_dir/$input_file.candc.xml
 ./candc-1.00/bin/candc --models candc-1.00/models --candc-printer xml --input $token_file > $candc_xml
