@@ -1,4 +1,4 @@
-import os, sys
+import os
 import subprocess
 import logging
 import shlex
@@ -8,18 +8,22 @@ from sklearn.base import TransformerMixin
 my_logger = logging.getLogger(__name__)
 
 class CCGParser(TransformerMixin):
+    """A CCG Parser that parses a tokenized corpus into CCG Syntax XML trees
+    using an external CCG parser and tree translator
+    """
     def __init__(self, parser_exe: str = "candc-1.00/bin/candc",
                  config_file: str = None,
                  model_path: str = "candc-1.00/models",
                  parser_printer: str = "xml",
                  parser_log_file: str = None,
-                 ccg_translator: str = "en/candc2transccg.py",
+                 trans_exe: str = "en/candc2transccg.py",
                  output_dir: str = None):
         assert os.path.exists(parser_exe)
-        #assert os.path.exists(ccg_translator)
+        assert os.path.exists(trans_exe)
 
         # resolve the absolute path to the executable
         self.parser_exe = parser_exe
+        self.parser_name = os.path.splitext(os.path.basename(parser_exe))[0]
         self.config_file = config_file
         self.model_path = model_path
         self.parser_printer = parser_printer
@@ -30,7 +34,7 @@ class CCGParser(TransformerMixin):
             config_option = f"--config {self.config_file}"
         else:
             config_option = ""
-        self.ccg_translator = ccg_translator
+        self.trans_exe = trans_exe
         if self.parser_log_file:
             log_option = f"--log {self.parser_log_file}"
             log_arg = self.parser_log_file
@@ -47,25 +51,24 @@ class CCGParser(TransformerMixin):
                           f"--candc-printer {self.parser_printer} ")
         # to be replaced by the output file from C&C
         place_holder = "{0}"
-        self.ccg_trans = f"{self.ccg_translator} {place_holder} {log_arg}"
+        self.ccg_trans = f"{self.trans_exe} {place_holder} {log_arg}"
                  
     def transform(self, input_file: str) -> str|None:
-        """parse tokenized input_file to CCG tree"""
+        """parse tokenized input_file to CCG tree XML file"""
         assert os.path.exists(input_file)
 
         # figure out where to save the output from the input
-        input_name = os.path.basename(input_file)
-        input_root, _input_ext = os.path.splitext(input_name)
+        input_root = os.path.splitext(os.path.basename(input_file))[0]
         
-        # save the output files to a given dir or the where the input is
+        # save the output files to a given dir or the input folder
         if self.output_dir:
             output_dir = self.output_dir
         else:
             output_dir = os.path.dirname(input_file)
 
-        parser_file = f"{input_root}.candc.{self.parser_printer}"
+        parser_file = f"{input_root}.{self.parser_name}.{self.parser_printer}"
         parser_path = os.path.join(output_dir, parser_file)
-        parse_output = os.path.join(output_dir, f"{input_root}.xml")
+        parse_output = os.path.join(output_dir, f"{input_root}.syn.xml")
 
         # run the external parsers with the files
         parse_command = shlex.split(self.ccg_parse + f"--input {input_file} --output {parser_path}")
@@ -77,7 +80,7 @@ class CCGParser(TransformerMixin):
                 completed_process = subprocess.run(trans_command, stdout=out_file, check=True)
                 my_logger.debug(f"{trans_command} -> {completed_process.returncode}")
             return parse_output
-        except subprocess.CalledProcessError as error:
+        except Exception as error:
             my_logger.error(error)
             return None
             
