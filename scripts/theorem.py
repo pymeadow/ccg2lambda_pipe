@@ -21,6 +21,7 @@ import itertools
 import logging
 from lxml import etree
 import subprocess
+import os
 
 from coq_analyzer import analyze_coq_output
 from nltk2coq import normalize_interpretation

@@ -181,4 +181,6 @@ def prove_doc_ind(document_ind):
     return etree.tostring(proof_node)
 
 if __name__ == '__main__':
+    import nltk
+    nltk.data.path = os.environ['NLTK_DATA_PATH'].split(":")
     main()
