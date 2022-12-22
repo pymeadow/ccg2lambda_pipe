@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 #  Copyright 2015 Pascual Martinez-Gomez
@@ -209,7 +209,7 @@ def main(args=None):
         sys.exit(1)
 
     if args.log_fname != "" and not os.path.exists(args.log_fname):
-        print('C&C XML file does not exist: {0}'.format(args.log_fname))
+        print('C&C log file does not exist: {0}'.format(args.log_fname))
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
