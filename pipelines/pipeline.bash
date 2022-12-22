@@ -13,15 +13,16 @@ candc_xml=$input_dir/$input_file.candc.xml
 ./candc-1.00/bin/candc --models candc-1.00/models --candc-printer xml --input $token_file > $candc_xml
 
 parse_xml=$input_dir/$input_file.syn.xml
-python3 en/candc2transccg.py $candc_xml > $parse_xml
+en/candc2transccg.py $candc_xml > $parse_xml
 
 sem_xml=$input_dir/$input_file.sem.xml
-python3 scripts/semparse.py $parse_xml en/semantic_templates_en_emnlp2015.yaml $sem_xml
+scripts/semparse.py $parse_xml en/semantic_templates_en_emnlp2015.yaml $sem_xml
 
-entail_html=$input_dir/${input_file}.sem.html
-python3 scripts/prove.py $sem_xml --graph_out $entail_html
+entail_html=$input_dir/${input_file}.pro.html
+proof_xml=$input_dir/${input_file}.pro.xml
+scripts/prove.py $sem_xml --proof $proof_xml --graph_out $entail_html
 
 tree_html=$input_dir/${input_file}.syn.html
-python3 scripts/visualize.py $parse_xml > $tree_html
+scripts/visualize.py $parse_xml > $tree_html
 
 set +x

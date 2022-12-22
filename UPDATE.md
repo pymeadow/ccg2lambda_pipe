@@ -23,10 +23,8 @@ source ../../py_environs/ccg2lambda/bin/activate
 pip3 install -r requirements.txt
 
 # download wordnet and punctuations for English tokenization
-python3 -c "import nltk; nltk.download('wordnet'); nltk.download('punkt')"
-cd ~/nltk_data/corpora
-/usr/bin/unzip wordnet.zip
-cd ~/nltk_data/punkt
+python3 -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4'); nltk.download('punkt')"
+cd ~/nltk_data/tokenizer
 /usr/bin/unzip punkt.zip
 
 python3 scripts/run_tests.py

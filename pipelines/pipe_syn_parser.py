@@ -7,10 +7,8 @@ from sklearn.base import TransformerMixin
 
 my_logger = logging.getLogger(__name__)
 
-class CCGParser(TransformerMixin):
-    """A CCG Parser that parses a tokenized corpus into CCG Syntax XML trees
-    using an external CCG parser and tree translator
-    """
+class CCGSynParser(TransformerMixin):
+    """Adapt C&C parser to scikit-learn transformer"""
     def __init__(self, parser_exe: str = "candc-1.00/bin/candc",
                  config_file: str = None,
                  model_path: str = "candc-1.00/models",
@@ -19,6 +17,7 @@ class CCGParser(TransformerMixin):
                  trans_exe: str = "en/candc2transccg.py",
                  output_dir: str = None):
         assert os.path.exists(parser_exe)
+        assert os.path.exists(model_path)
         assert os.path.exists(trans_exe)
 
         # resolve the absolute path to the executable
@@ -58,7 +57,7 @@ class CCGParser(TransformerMixin):
         assert os.path.exists(input_file)
 
         # figure out where to save the output from the input
-        input_root = os.path.splitext(os.path.basename(input_file))[0]
+        input_root = os.path.basename(input_file).split(".")[0]
         
         # save the output files to a given dir or the input folder
         if self.output_dir:
@@ -87,5 +86,6 @@ class CCGParser(TransformerMixin):
 # unit test
 if __name__ == "__main__":
     # python pipelines/pipe_ccg_parser.py
-    ccg_parser = CCGParser()
-    output_file = ccg_parser.transform("datasets/corpus_test/sentences.tok")
+    ccg_parser = CCGSynParser()
+    output_file = ccg_parser.transform("datasets/corpus_test/sentences.tok.txt")
+    print(f"output_file={output_file}")

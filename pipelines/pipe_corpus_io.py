@@ -33,16 +33,15 @@ class CorpusWriter(TransformerMixin):
         return self.token_file
 
 
+# unit test
 if __name__ == "__main__":
-    # unit test
-    # PYTHONPATH=. python3 pipelines/corpus_io.py
     from sklearn.pipeline import Pipeline
     from en.pipe_tokenizer import Tokenizer
     
     pipe = Pipeline([
         ("reader", CorpusReader()),
         ("tokenizer", Tokenizer()),
-        ("writer", CorpusWriter("/tmp/sentences.tok")),
+        ("writer", CorpusWriter("/tmp/sentences.tok.txt")),
         ("checker", CorpusReader())])
     token_corpus = pipe.transform("datasets/corpus_test/sentences.txt")
     print(token_corpus)
