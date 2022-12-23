@@ -48,7 +48,9 @@ class CCGTreeVisualizer(TransformerMixin):
             with open(output_file, "w") as fp:
                 completed_process = subprocess.run(run_command, check=True, stdout=fp)
                 my_logger.debug(f"{run_command} -> {completed_process.returncode}")
-                return output_file
+                # return input file, instead of output_file, because visualization
+                # is treated as an Identity operation that does not change the input
+                return input_file
         except Exception as error:
             my_logger.error(error)
             return None

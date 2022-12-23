@@ -19,13 +19,17 @@ class CorpusReader(TransformerMixin):
 
 class CorpusWriter(TransformerMixin):
     """save tokenized corpus to file"""
-    def __init__(self, token_file: str, token_delimiter: str =" "):
-        assert token_file
-        self.token_file = token_file
+    def __init__(self, token_delimiter: str =" "):
+        """initialization"""
+        self.token_file = None
         self.token_delimiter = token_delimiter
     
+    def set_params(self, token_file=None):
+        self.token_file = token_file
+
     def transform(self, token_corpus: List[List[str]]) -> str:
         """join tokens with a delimiter into a string"""
+        assert self.token_file
         with open(self.token_file, "w") as output_file:
             for token_list in token_corpus:
                 token_sent = self.token_delimiter.join(token_list)
@@ -41,7 +45,8 @@ if __name__ == "__main__":
     pipe = Pipeline([
         ("reader", CorpusReader()),
         ("tokenizer", Tokenizer()),
-        ("writer", CorpusWriter("/tmp/sentences.tok.txt")),
+        ("writer", CorpusWriter()),
         ("checker", CorpusReader())])
+    pipe.set_params(writer__token_file="/tmp/sentences.tok.txt")
     token_corpus = pipe.transform("datasets/corpus_test/sentences.txt")
     print(token_corpus)
