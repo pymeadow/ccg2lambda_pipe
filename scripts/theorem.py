@@ -452,7 +452,7 @@ class MasterTheorem(Theorem):
         return mt_node
 
 
-def generate_semantics_from_doc(doc, max_gen=1, use_gold_trees=False):
+def generate_semantics_from_doc(doc, max_gen=1, use_gold_trees=False, min_sentences=2):
     """
     Returns string representations of logical formulas,
     as stored in the "sem" attribute of the root node
@@ -463,7 +463,7 @@ def generate_semantics_from_doc(doc, max_gen=1, use_gold_trees=False):
     """
     sentences = doc.xpath('./sentences/sentence')
     # There are not enough correctly parsed sentences to form a theorem.
-    if not sentences or len(sentences) < 2:
+    if not sentences or len(sentences) < min_sentences:
         return
     semantics_lists = []
     for sentence in sentences:
