@@ -12,7 +12,7 @@ from pipelines.pipe_tree_visualizer import CCGTreeVisualizer
 def main():
     tree_visualizer = CCGTreeVisualizer()
 
-    # construct a reusable pipleine
+    # construct a reusable pipeline for different input
     basic_pipe = Pipeline([
         ("corpus_reader", CorpusReader()),
         ("en_tokenizer", Tokenizer()),
@@ -25,8 +25,9 @@ def main():
         ("pivot", "passthrough")
         ])
     
-    basic_pipe.set_params(corpus_writer__token_file="datasets/corpus_test/sentences.tok.txt")
-    output_file = basic_pipe.transform("datasets/corpus_test/sentences.txt")
+    input_file = "datasets/corpus_test/sentences.tok.txt"
+    basic_pipe.set_params(corpus_writer__input_file=input_file)
+    output_file = basic_pipe.transform(input_file)
     print(output_file)
 
 main()
