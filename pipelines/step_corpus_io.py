@@ -20,12 +20,15 @@ class CorpusReader(TransformerMixin):
 
 class CorpusWriter(TransformerMixin):
     """save tokenized corpus to output file derived from input file"""
-    def __init__(self, output_dir:str = None, token_delimiter: str =" "):
+    def __init__(self, output_dir:str = None, 
+                 token_delimiter: str =" ",
+                 output_suffix=".tok.txt"):
         """initialization"""
         self.output_dir = output_dir
         self.output_file = None
         self.token_delimiter = token_delimiter
-    
+        self.output_suffix = output_suffix
+
     def set_params(self, input_file=None):
         """derive output file from input file"""
         self.input_file = input_file
@@ -38,7 +41,7 @@ class CorpusWriter(TransformerMixin):
             output_dir = self.output_dir
         else:
             output_dir = os.path.dirname(input_file)
-        self.output_file = os.path.join(output_dir, f"{input_root}.tok.txt")
+        self.output_file = os.path.join(output_dir, f"{input_root}.{self.output_suffix}")
         
 
     def transform(self, token_corpus: List[List[str]]) -> str:

@@ -107,8 +107,8 @@ def main(args = None):
             fout.write(html_str)
 
 @time_count
-def serialize_tree_to_file(tree_xml, fname):
-    root_xml_str = serialize_tree(tree_xml)
+def serialize_tree_to_file(tree_xml, fname, encoding='utf-8'):
+    root_xml_str = serialize_tree(tree_xml, encoding)
     with codecs.open(fname, 'wb') as fout:
         fout.write(root_xml_str)
     return

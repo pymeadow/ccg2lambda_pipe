@@ -188,9 +188,9 @@ def filter_attributes(tree):
         filter_attributes(child)
     return
 
-def serialize_tree(tree):
+def serialize_tree(tree, encoding='utf-8'):
     tree_str = etree.tostring(
-        tree, xml_declaration=True, encoding='utf-8', pretty_print=True)
+        tree, xml_declaration=True, encoding=encoding, pretty_print=True)
     return tree_str
 
 if __name__ == '__main__':

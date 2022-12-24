@@ -185,6 +185,36 @@ def get_failed_inds_from_log(log_fname):
                 failed_inds.add(failed_index)
     return failed_inds
 
+def translate_candc_tree(xml_fname, log_fname):
+    """translate C&C parse tree to CCG tree"""
+    failed_inds = set()
+    if log_fname:
+        failed_inds = get_failed_inds_from_log(log_fname)
+        print('Found failures: {0}'.format(failed_inds), file=sys.stderr)
+
+    parser = etree.XMLParser(remove_blank_text=True)
+    xml_tree = etree.parse(xml_fname, parser)
+    root = xml_tree.getroot()
+    ccg_trees = root.findall('ccg')
+
+    transccg_trees = []
+    sentence_num = 1
+    for ccg_tree in ccg_trees:
+        while sentence_num in failed_inds:
+            # Make empty sentence node if C&C failed to parse.
+            transccg_tree = etree.Element('sentence')
+            transccg_trees.append(transccg_tree)
+            sentence_num += 1
+            print('Make dummy node.', file=sys.stderr)
+        transccg_tree = candc_to_transccg(ccg_tree, sentence_num - 1)
+        transccg_trees.append(transccg_tree)
+        sentence_num += 1
+
+    print('Produced {0} transccg trees'.format(len(transccg_trees)), file=sys.stderr)
+    transccg_xml_tree = make_transccg_xml_tree(transccg_trees)
+    return transccg_xml_tree, xml_tree.docinfo.encoding
+
+
 def main(args=None):
     DESCRIPTION=textwrap.dedent("""\
         Convert C&C XML format into transccg format.
@@ -213,32 +243,7 @@ def main(args=None):
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
-    failed_inds = set()
-    if args.log_fname != "":
-        failed_inds = get_failed_inds_from_log(args.log_fname)
-        print('Found failures: {0}'.format(failed_inds), file=sys.stderr)
-
-    parser = etree.XMLParser(remove_blank_text=True)
-    xml_tree = etree.parse(args.xml_fname, parser)
-    root = xml_tree.getroot()
-    ccg_trees = root.findall('ccg')
-
-    transccg_trees = []
-    sentence_num = 1
-    for ccg_tree in ccg_trees:
-        while sentence_num in failed_inds:
-            # Make empty sentence node if C&C failed to parse.
-            transccg_tree = etree.Element('sentence')
-            transccg_trees.append(transccg_tree)
-            sentence_num += 1
-            print('Make dummy node.', file=sys.stderr)
-        transccg_tree = candc_to_transccg(ccg_tree, sentence_num - 1)
-        transccg_trees.append(transccg_tree)
-        sentence_num += 1
-
-    print('Produced {0} transccg trees'.format(len(transccg_trees)), file=sys.stderr)
-    transccg_xml_tree = make_transccg_xml_tree(transccg_trees)
-    encoding = xml_tree.docinfo.encoding
+    transccg_xml_tree, encoding = translate_candc_tree(args.xml_fname, args.log_fname)
     result = etree.tostring(transccg_xml_tree, xml_declaration=True,
                             encoding=encoding, pretty_print=True)
     print(result.decode('utf-8'))

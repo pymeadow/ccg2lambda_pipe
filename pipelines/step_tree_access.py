@@ -1,48 +1,8 @@
-"""Steps and utilities to read/write information from/to CCG trees"""
-import os
-import logging
 from typing import List, Dict
 
-from sklearn.base import TransformerMixin
-
 from lxml import etree
-
-from scripts.prove import serialize_tree_to_file
 from scripts.theorem import generate_semantics_from_doc
 from scripts.semantic_types import get_dynamic_library_from_doc
-
-my_logger = logging.getLogger(__name__)
-
-#===================================================
-# Basic tree IO steps
-#===================================================
-
-class CCGTreeReader(TransformerMixin):
-    """load CCG tree from file into memory"""
-    def __init__(self):
-        self.xml_parser = etree.XMLParser(remove_blank_text=True)
-    
-    def transform(self, input_file: str) -> etree._Element:
-        assert os.path.exists(input_file)
-        root = etree.parse(input_file, self.xml_parser)    
-        return root
-
-class CCGTreeWriter(TransformerMixin):
-    """save CCG tree in memory to output file"""
-    def __init__(self):
-        """initialization"""
-        self.output_file = None
-    
-    def set_params(self, output_file=None):
-        """set the output file before transform"""
-        assert output_file
-        self.output_file = output_file       
-
-    def transform(self, root: etree._Element) -> str:
-        """save xml tree to file"""
-        assert self.output_file
-        serialize_tree_to_file(root, self.output_file)
-        return self.output_file
 
 #===================================================
 # Tree utilities to support custom steps
@@ -84,19 +44,3 @@ class CCGTree():
             corpus_semantics.append(result)
         return corpus_semantics
         
-#===================================================
-# unit test
-#===================================================
-if __name__ == "__main__":
-    from sklearn.pipeline import Pipeline
-    tree_reader = CCGTreeReader()
-    tree_writer = CCGTreeWriter()
-    io_pipe = Pipeline([
-        ("reader", tree_reader),
-        ("writer", tree_writer)])
-    # load xml file into memory then save it back to the same file
-    # the file should not change
-    input_file = "datasets/corpus_test/sentences.pro.xml"
-    io_pipe.set_params(writer__output_file=input_file)
-    output_file = io_pipe.transform(input_file)
-    print(output_file)

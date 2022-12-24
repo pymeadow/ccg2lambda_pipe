@@ -2,6 +2,7 @@ import os
 import subprocess
 import logging
 import shlex
+from typing import Tuple
 
 from sklearn.base import TransformerMixin
 
@@ -14,13 +15,11 @@ class CCGSynParser(TransformerMixin):
                  model_path: str = "candc-1.00/models",
                  parser_printer: str = "xml",
                  parser_log_file: str = None,
-                 trans_exe: str = "en/candc2transccg.py",
                  output_dir: str = None):
         assert os.path.exists(parser_exe)
         assert os.path.exists(model_path)
-        assert os.path.exists(trans_exe)
 
-        # resolve the absolute path to the executable
+        # figure out the command to run the parser
         self.parser_exe = parser_exe
         self.parser_name = os.path.splitext(os.path.basename(parser_exe))[0]
         self.config_file = config_file
@@ -33,27 +32,24 @@ class CCGSynParser(TransformerMixin):
             config_option = f"--config {self.config_file}"
         else:
             config_option = ""
-        self.trans_exe = trans_exe
         if self.parser_log_file:
             log_option = f"--log {self.parser_log_file}"
-            log_arg = self.parser_log_file
         else:
             log_option = ""
-            log_arg = ""
         
         if self.output_dir and not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir, exist_ok=True)
 
         # prepare the commands to run
+        input_file = "{0}"
+        output_file = "{1}"
         self.ccg_parse = (f"{self.parser_exe} {config_option} {log_option} " + 
                           f"--models {self.model_path} " +
-                          f"--candc-printer {self.parser_printer} ")
-        # to be replaced by the output file from C&C
-        place_holder = "{0}"
-        self.ccg_trans = f"{self.trans_exe} {place_holder} {log_arg}"
+                          f"--candc-printer {self.parser_printer} " +
+                          f"--input {input_file} --output {output_file}")
                  
-    def transform(self, input_file: str) -> str|None:
-        """parse tokenized input_file to CCG tree XML file"""
+    def transform(self, input_file: str) -> Tuple[str, str|None]|None:
+        """parse tokenized sentences to XML file"""
         assert os.path.exists(input_file)
 
         # figure out where to save the output from the input
@@ -65,27 +61,22 @@ class CCGSynParser(TransformerMixin):
         else:
             output_dir = os.path.dirname(input_file)
 
-        parser_file = f"{input_root}.{self.parser_name}.{self.parser_printer}"
-        parser_path = os.path.join(output_dir, parser_file)
-        parse_output = os.path.join(output_dir, f"{input_root}.syn.xml")
+        output_file = f"{input_root}.{self.parser_name}.{self.parser_printer}"
+        output_file = os.path.join(output_dir, output_file)
 
         # run the external parsers with the files
-        parse_command = shlex.split(self.ccg_parse + f"--input {input_file} --output {parser_path}")
-        trans_command = shlex.split(f"{self.ccg_trans.format(parser_path)}")
+        parse_command = shlex.split(self.ccg_parse.format(input_file, output_file))
         try:
             completed_process = subprocess.run(parse_command, check=True)
             my_logger.debug(f"{parse_command} -> {completed_process.returncode}")
-            with open(parse_output, "w") as out_file:
-                completed_process = subprocess.run(trans_command, stdout=out_file, check=True)
-                my_logger.debug(f"{trans_command} -> {completed_process.returncode}")
-            return parse_output
+            return (output_file, self.parser_log_file) 
         except Exception as error:
             my_logger.error(error)
             return None
             
 # unit test
 if __name__ == "__main__":
-    # python pipelines/pipe_ccg_parser.py
     ccg_parser = CCGSynParser()
-    output_file = ccg_parser.transform("datasets/corpus_test/sentences.tok.txt")
+    output_file, log_file = ccg_parser.transform("datasets/corpus_test/sentences.tok.txt")
     print(f"output_file={output_file}")
+    assert output_file == "datasets/corpus_test/sentences.candc.xml"
