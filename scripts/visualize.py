@@ -29,6 +29,19 @@ from visualization_latex import convert_doc_to_latex
 
 from scripts.xml_utils import deserialize_file_to_tree
 
+def visualize_parse_tree(root, args):
+    if args.format == "plain":
+        html_str = convert_root_to_mathml(root)
+        print(html_str)
+
+    if args.format == "vertical":
+        html_str = convert_vertical_to_mathml(root)
+        print(html_str)
+
+    if args.format == "latex":
+        latex_str = convert_doc_to_latex(root)
+        print(latex_str)
+    
 def main(args = None):
     DESCRIPTION=textwrap.dedent("""\
             Prints graphically in HTML the CCG tree. If <semantics> content
@@ -56,18 +69,7 @@ def main(args = None):
     logging.basicConfig(level=logging.WARNING)
 
     root = deserialize_file_to_tree(args.trees_xml)
-
-    if args.format == "plain":
-        html_str = convert_root_to_mathml(root)
-        print(html_str)
-
-    if args.format == "vertical":
-        html_str = convert_vertical_to_mathml(root)
-        print(html_str)
-
-    if args.format == "latex":
-        latex_str = convert_doc_to_latex(root)
-        print(latex_str)
+    visualize_parse_tree(root, args)
 
 if __name__ == '__main__':
     main()
