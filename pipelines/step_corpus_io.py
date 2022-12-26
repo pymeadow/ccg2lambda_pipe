@@ -22,7 +22,7 @@ class CorpusWriter(TransformerMixin):
     """save tokenized corpus to output file derived from input file"""
     def __init__(self, output_dir:str = None, 
                  token_delimiter: str =" ",
-                 output_suffix=".tok.txt"):
+                 output_suffix="tok.txt"):
         """initialization"""
         self.output_dir = output_dir
         self.output_file = None
@@ -57,11 +57,11 @@ class CorpusWriter(TransformerMixin):
 # unit test
 if __name__ == "__main__":
     from sklearn.pipeline import Pipeline
-    from en.pipe_tokenizer import Tokenizer
+    from en.step_tokenizer import WordTokenizer
     
     pipe = Pipeline([
         ("reader", CorpusReader()),
-        ("tokenizer", Tokenizer()),
+        ("tokenizer", WordTokenizer()),
         ("writer", CorpusWriter()),
         ("checker", CorpusReader())])
     input_file = "datasets/corpus_test/sentences.txt"

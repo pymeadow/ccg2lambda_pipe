@@ -2,9 +2,11 @@ import os
 import subprocess
 import logging
 import shlex
-from typing import Tuple
 
 from sklearn.base import TransformerMixin
+
+from pipelines.data_types import ParseData
+from en.candc2transccg import translate_candc_tree
 
 my_logger = logging.getLogger(__name__)
 
@@ -14,7 +16,7 @@ class CCGSynParser(TransformerMixin):
                  config_file: str = None,
                  model_path: str = "candc-1.00/models",
                  parser_printer: str = "xml",
-                 parser_log_file: str = None,
+                 log_file: str = None,
                  output_dir: str = None):
         assert os.path.exists(parser_exe)
         assert os.path.exists(model_path)
@@ -25,15 +27,15 @@ class CCGSynParser(TransformerMixin):
         self.config_file = config_file
         self.model_path = model_path
         self.parser_printer = parser_printer
-        self.parser_log_file = parser_log_file
+        self.log_file = log_file
         self.output_dir = output_dir
 
         if self.config_file:
             config_option = f"--config {self.config_file}"
         else:
             config_option = ""
-        if self.parser_log_file:
-            log_option = f"--log {self.parser_log_file}"
+        if self.log_file:
+            log_option = f"--log {self.log_file}"
         else:
             log_option = ""
         
@@ -48,8 +50,8 @@ class CCGSynParser(TransformerMixin):
                           f"--candc-printer {self.parser_printer} " +
                           f"--input {input_file} --output {output_file}")
                  
-    def transform(self, input_file: str) -> Tuple[str, str|None]|None:
-        """parse tokenized sentences to XML file"""
+    def transform(self, input_file: str) -> ParseData:
+        """parse tokenized sentences to XML trees"""
         assert os.path.exists(input_file)
 
         # figure out where to save the output from the input
@@ -68,15 +70,24 @@ class CCGSynParser(TransformerMixin):
         parse_command = shlex.split(self.ccg_parse.format(input_file, output_file))
         try:
             completed_process = subprocess.run(parse_command, check=True)
+            transccg_root, encoding = translate_candc_tree(output_file, self.log_file)
+            parse_data = ParseData(parse_result=transccg_root, 
+                                   parse_encode=encoding,
+                                   input_file=input_file,
+                                   output_file=output_file)
             my_logger.debug(f"{parse_command} -> {completed_process.returncode}")
-            return (output_file, self.parser_log_file) 
         except Exception as error:
+            parse_data = ParseData(parse_error=error)
             my_logger.error(error)
-            return None
+        return parse_data
             
 # unit test
 if __name__ == "__main__":
+    import lxml
+
     ccg_parser = CCGSynParser()
-    output_file, log_file = ccg_parser.transform("datasets/corpus_test/sentences.tok.txt")
-    print(f"output_file={output_file}")
-    assert output_file == "datasets/corpus_test/sentences.candc.xml"
+    parse_data = ccg_parser.transform("datasets/corpus_test/sentences.tok.txt")
+    print(f"{parse_data}")
+    assert type(parse_data.parse_result) is lxml.etree._Element
+    assert parse_data.parse_encode == "UTF-8"
+    assert parse_data.output_file == "datasets/corpus_test/sentences.candc.xml"

@@ -5,7 +5,7 @@ from sklearn.base import TransformerMixin
 import nltk
 from nltk.tokenize import word_tokenize
 
-class Tokenizer(TransformerMixin):
+class WordTokenizer(TransformerMixin):
     """NLTK tokenizer as scikit-learn transformer"""
     def __init__(self, nltk_data_paths: List[str] = None):
         self.nltk_data_paths = nltk_data_paths
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # cat datasets/corpus_test/sentences.txt | python3 en/pipe_tokenizer.py
     import sys, os
     nltk_data_paths = [os.path.expanduser("~/nltk_data")]
-    tokenizer = Tokenizer(nltk_data_paths)
+    tokenizer = WordTokenizer(nltk_data_paths)
     sentences = [line for line in sys.stdin]
     print(tokenizer.transform(sentences))
 
