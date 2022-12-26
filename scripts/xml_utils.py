@@ -17,6 +17,6 @@ def serialize_tree(tree, encoding='utf-8'):
 def serialize_tree_to_file(tree_xml, fname, encoding='utf-8'):
     root_xml_str = serialize_tree(tree_xml, encoding)
     with codecs.open(fname, 'wb') as fout:
-        fout.write(root_xml_str)
+        fout.write(root_xml_str + b"\n")
     return
 

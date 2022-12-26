@@ -27,7 +27,9 @@ class CCGTreeVisualizer(TransformerMixin):
         self.args.format = visual_format
 
     def transform(self, parse_data: ParseData) -> ParseData:
-        input_file = parse_data.input_file
+        """convert XML parse tree to layout in HTML/Latex"""
+        # always use the output_file to derive the visual file
+        input_file = parse_data.output_file
         assert os.path.exists(input_file)
 
         # figure out where to save the output from the input:

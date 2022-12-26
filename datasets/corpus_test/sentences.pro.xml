@@ -157,3 +157,4 @@ Theorem t1: (forall x, ((_woman x) -&gt; (True -&gt; (exists z1, (and (and (or (
     </proof>
   </document>
 </root>
+
