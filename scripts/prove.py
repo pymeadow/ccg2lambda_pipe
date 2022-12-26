@@ -43,8 +43,6 @@ lock = Lock()
 
 def main(args = None):
     global ARGS
-    global DOCS
-    global ABDUCTION
     DESCRIPTION=textwrap.dedent("""\
             The input file sem should contain the parsed sentences. All CCG trees correspond
             to the premises, except the last one, which is the hypothesis.
@@ -81,22 +79,8 @@ def main(args = None):
         parser.print_help(file=sys.stderr)
         sys.exit(1)
     
-    if ARGS.abduction == "spsa":
-        from abduction_spsa import AxiomsWordnet
-        ABDUCTION = AxiomsWordnet()
-    elif ARGS.abduction == "naive":
-        from abduction_naive import AxiomsWordnet
-        ABDUCTION = AxiomsWordnet()
-
     root = deserialize_file_to_tree(ARGS.sem)
-
-    DOCS = root.findall('.//document')
-    document_inds = range(len(DOCS))
-    proof_nodes = prove_docs(document_inds, ARGS.ncores)
-    assert len(proof_nodes) == len(DOCS), \
-        'Num. elements mismatch: {0} vs {1}'.format(len(proof_nodes), len(DOCS))
-    for doc, proof_node in zip(DOCS, proof_nodes):
-        doc.append(proof_node)
+    prove_entail(root)
 
     if ARGS.proof:
         serialize_tree_to_file(root, ARGS.proof)
@@ -106,6 +90,26 @@ def main(args = None):
         with codecs.open(ARGS.graph_out, 'w', 'utf-8') as fout:
             fout.write(html_str)
 
+def prove_entail(root):
+    """new entry function that accepts a XML tree"""
+    global DOCS
+    global ABDUCTION
+
+    if ARGS.abduction == "spsa":
+        from abduction_spsa import AxiomsWordnet
+        ABDUCTION = AxiomsWordnet()
+    elif ARGS.abduction == "naive":
+        from abduction_naive import AxiomsWordnet
+        ABDUCTION = AxiomsWordnet()
+
+    DOCS = root.findall('.//document')
+    document_inds = range(len(DOCS))
+    proof_nodes = prove_docs(document_inds, ARGS.ncores)
+    assert len(proof_nodes) == len(DOCS), \
+        'Num. elements mismatch: {0} vs {1}'.format(len(proof_nodes), len(DOCS))
+    for doc, proof_node in zip(DOCS, proof_nodes):
+        doc.append(proof_node)
+    
 @time_count
 def prove_docs(document_inds, ncores=1):
     if ncores <= 1:

@@ -2,12 +2,12 @@
 
 from sklearn.pipeline import Pipeline
 
-from en.pipe_tokenizer import Tokenizer
-from pipelines.pipe_corpus_io import CorpusReader, CorpusWriter
-from pipelines.pipe_syn_parser import CCGSynParser
-from pipelines.pipe_sem_parser import CCGSemParser
-from pipelines.pipe_entail_prover import COQEntailmentProver
-from pipelines.pipe_tree_visualizer import CCGTreeVisualizer
+from en.step_tokenizer import WordTokenizer
+from pipelines.step_corpus_io import CorpusReader, CorpusWriter
+from pipelines.step_syn_parser import CCGSynParser
+from pipelines.step_sem_parser import CCGSemParser
+from pipelines.step_entail_prover import COQEntailmentProver
+from pipelines.step_tree_visualizer import CCGTreeVisualizer
 
 def main():
     tree_visualizer = CCGTreeVisualizer()
@@ -15,7 +15,7 @@ def main():
     # construct a reusable pipeline for different input
     basic_pipe = Pipeline([
         ("corpus_reader", CorpusReader()),
-        ("en_tokenizer", Tokenizer()),
+        ("en_tokenizer", WordTokenizer()),
         ("corpus_writer", CorpusWriter()),
         ("syn_parser", CCGSynParser()),
         ("syn_visual", tree_visualizer),
