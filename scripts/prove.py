@@ -88,7 +88,7 @@ def main(args = None):
     if ARGS.graph_out:
         html_str = convert_root_to_mathml(root, ARGS.gold_trees)
         with codecs.open(ARGS.graph_out, 'w', 'utf-8') as fout:
-            fout.write(html_str)
+            fout.write(html_str + "\n")
 
 def prove_entail(root):
     """new entry function that accepts a XML tree"""
