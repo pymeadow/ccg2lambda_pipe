@@ -42,7 +42,9 @@ lock = Lock()
 
 def sem_parse(root):
     """extend sentence nodes with semantic nodes"""
-    global SENTENCES
+    global SENTENCES, SEMANTIC_INDEX
+
+    SEMANTIC_INDEX = SemanticIndex(ARGS.templates)
     SENTENCES = root.findall('.//sentence')
     # print('Found {0} sentences'.format(len(SENTENCES)))
     # from pudb import set_trace; set_trace()
@@ -55,9 +57,7 @@ def sem_parse(root):
         sentence.extend(sem_nodes)
     
 def main(args = None):
-    global SEMANTIC_INDEX
     global ARGS
-    global SENTENCES
     DESCRIPTION=textwrap.dedent("""\
             categories_template.yaml should contain the semantic templates
               in YAML format.
@@ -94,8 +94,6 @@ def main(args = None):
         sys.exit(1)
     
     logging.basicConfig(level=logging.WARNING)
-
-    SEMANTIC_INDEX = SemanticIndex(ARGS.templates)
 
     root = deserialize_file_to_tree(ARGS.ccg)
 
