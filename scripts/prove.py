@@ -30,9 +30,10 @@ import sys
 import textwrap
 
 from semantic_tools import prove_doc
-from semparse import serialize_tree
 from utils import time_count
 from visualization_tools import convert_root_to_mathml
+
+from scripts.xml_utils import serialize_tree_to_file, deserialize_file_to_tree
 
 ARGS=None
 DOCS=None
@@ -87,8 +88,7 @@ def main(args = None):
         from abduction_naive import AxiomsWordnet
         ABDUCTION = AxiomsWordnet()
 
-    parser = etree.XMLParser(remove_blank_text=True)
-    root = etree.parse(ARGS.sem, parser)
+    root = deserialize_file_to_tree(ARGS.sem)
 
     DOCS = root.findall('.//document')
     document_inds = range(len(DOCS))
@@ -105,13 +105,6 @@ def main(args = None):
         html_str = convert_root_to_mathml(root, ARGS.gold_trees)
         with codecs.open(ARGS.graph_out, 'w', 'utf-8') as fout:
             fout.write(html_str)
-
-@time_count
-def serialize_tree_to_file(tree_xml, fname, encoding='utf-8'):
-    root_xml_str = serialize_tree(tree_xml, encoding)
-    with codecs.open(fname, 'wb') as fout:
-        fout.write(root_xml_str)
-    return
 
 @time_count
 def prove_docs(document_inds, ncores=1):

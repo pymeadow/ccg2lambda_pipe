@@ -8,7 +8,7 @@ from sklearn.base import TransformerMixin
 import lxml
 
 from pipelines.data_types import ParseData
-from scripts.prove import serialize_tree_to_file
+from scripts.xml_utils import serialize_tree_to_file, deserialize_file_to_tree
 
 my_logger = logging.getLogger(__name__)
 
@@ -23,9 +23,9 @@ class CCGTreeReader(TransformerMixin):
     
     def transform(self, input_file: str) -> ParseData:
         assert os.path.exists(input_file)
-        xml_tree = lxml.etree.parse(input_file, self.xml_parser)
+        xml_tree = deserialize_file_to_tree(input_file)
         encoding = xml_tree.docinfo.encoding
-        return ParseData(parse_result=xml_tree.getroot(), 
+        return ParseData(parse_result=xml_tree, 
                          parse_encode=encoding,
                          input_file=input_file) 
 

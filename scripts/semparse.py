@@ -32,12 +32,28 @@ from nltk.sem.logic import LogicalExpressionException
 from ccg2lambda_tools import assign_semantics_to_ccg
 from semantic_index import SemanticIndex
 
+from scripts.xml_utils import serialize_tree_to_file, deserialize_file_to_tree
+
 SEMANTIC_INDEX=None
 ARGS=None
 SENTENCES=None
 kMaxTasksPerChild=None
 lock = Lock()
 
+def sem_parse(root):
+    """extend sentence nodes with semantic nodes"""
+    global SENTENCES
+    SENTENCES = root.findall('.//sentence')
+    # print('Found {0} sentences'.format(len(SENTENCES)))
+    # from pudb import set_trace; set_trace()
+    sentence_inds = range(len(SENTENCES))
+    sem_nodes_lists = semantic_parse_sentences(sentence_inds, ARGS.ncores)
+    assert len(sem_nodes_lists) == len(SENTENCES), \
+        'Element mismatch: {0} vs {1}'.format(len(sem_nodes_lists), len(SENTENCES))
+    logging.info('Adding XML semantic nodes to sentences...')
+    for sentence, sem_nodes in zip(SENTENCES, sem_nodes_lists):
+        sentence.extend(sem_nodes)
+    
 def main(args = None):
     global SEMANTIC_INDEX
     global ARGS
@@ -81,24 +97,12 @@ def main(args = None):
 
     SEMANTIC_INDEX = SemanticIndex(ARGS.templates)
 
-    parser = etree.XMLParser(remove_blank_text=True)
-    root = etree.parse(ARGS.ccg, parser)
+    root = deserialize_file_to_tree(ARGS.ccg)
 
-    SENTENCES = root.findall('.//sentence')
-    # print('Found {0} sentences'.format(len(SENTENCES)))
-    # from pudb import set_trace; set_trace()
-    sentence_inds = range(len(SENTENCES))
-    sem_nodes_lists = semantic_parse_sentences(sentence_inds, ARGS.ncores)
-    assert len(sem_nodes_lists) == len(SENTENCES), \
-        'Element mismatch: {0} vs {1}'.format(len(sem_nodes_lists), len(SENTENCES))
-    logging.info('Adding XML semantic nodes to sentences...')
-    for sentence, sem_nodes in zip(SENTENCES, sem_nodes_lists):
-        sentence.extend(sem_nodes)
+    sem_parse(root)        
     logging.info('Finished adding XML semantic nodes to sentences.')
 
-    root_xml_str = serialize_tree(root)
-    with codecs.open(ARGS.sem, 'wb') as fout:
-        fout.write(root_xml_str)
+    serialize_tree_to_file(root, ARGS.sem)
 
 def semantic_parse_sentences(sentence_inds, ncores=1):
     if ncores <= 1:
@@ -187,11 +191,6 @@ def filter_attributes(tree):
     for child in tree:
         filter_attributes(child)
     return
-
-def serialize_tree(tree, encoding='utf-8'):
-    tree_str = etree.tostring(
-        tree, xml_declaration=True, encoding=encoding, pretty_print=True)
-    return tree_str
 
 if __name__ == '__main__':
     main()

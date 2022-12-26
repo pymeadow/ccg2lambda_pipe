@@ -24,6 +24,8 @@ import os
 import sys
 import textwrap
 
+from scripts.xml_utils import deserialize_file_to_tree
+
 def get_nodes_by_tag(root, tag):
     nodes = []
     if root.tag == tag:
@@ -192,8 +194,7 @@ def translate_candc_tree(xml_fname, log_fname):
         failed_inds = get_failed_inds_from_log(log_fname)
         print('Found failures: {0}'.format(failed_inds), file=sys.stderr)
 
-    parser = etree.XMLParser(remove_blank_text=True)
-    xml_tree = etree.parse(xml_fname, parser)
+    xml_tree = deserialize_file_to_tree(xml_fname)
     root = xml_tree.getroot()
     ccg_trees = root.findall('ccg')
 

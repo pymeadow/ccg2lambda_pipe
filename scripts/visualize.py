@@ -27,6 +27,8 @@ from visualization_tools import convert_root_to_mathml
 from visualization_vertical_tools import convert_vertical_to_mathml
 from visualization_latex import convert_doc_to_latex
 
+from scripts.xml_utils import deserialize_file_to_tree
+
 def main(args = None):
     DESCRIPTION=textwrap.dedent("""\
             Prints graphically in HTML the CCG tree. If <semantics> content
@@ -53,8 +55,7 @@ def main(args = None):
     
     logging.basicConfig(level=logging.WARNING)
 
-    parser = etree.XMLParser(remove_blank_text=True)
-    root = etree.parse(args.trees_xml, parser)
+    root = deserialize_file_to_tree(args.trees_xml)
 
     if args.format == "plain":
         html_str = convert_root_to_mathml(root)
