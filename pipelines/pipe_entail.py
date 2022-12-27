@@ -19,8 +19,8 @@ my_logger = logging.getLogger(__name__)
 
 def main():
     parser = argparse.ArgumentParser(description="Textual Entailment Pipeline")
-    parser.add_argument("--log_level", help="log level", type=str,
-                        default="DEBUG")
+    parser.add_argument("--input_file", help="input corpus file", type=str)
+    parser.add_argument("--log_level", help="log level", type=str, default="DEBUG")
     args = parser.parse_args()
     config_log(args.log_level)
 
@@ -41,7 +41,8 @@ def main():
         ("pivot", "passthrough")
         ])
     
-    input_file = "datasets/corpus_test/sentences.tok.txt"
+    # "datasets/corpus_test/sentences.txt"
+    input_file = args.input_file
     basic_pipe.set_params(corpus_writer__input_file=input_file)
     parse_data = basic_pipe.transform(input_file)
     my_logger.info(f"{input_file} => {parse_data}")
