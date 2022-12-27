@@ -7,6 +7,7 @@ from sklearn.base import TransformerMixin
 
 from pipelines.data_types import ParseData
 
+from scripts.utils import time_count
 import scripts.prove as prover
 from scripts.prove import prove_entail
 
@@ -33,6 +34,7 @@ class COQEntailmentProver(TransformerMixin):
         prover.ARGS.print = "result"
         prover.ARGS.print_length = "full"
 
+    @time_count
     def transform(self, parse_data: ParseData) -> ParseData:
         prove_entail(parse_data.parse_result)
         # return parse data as is because it was not changed

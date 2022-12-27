@@ -4,6 +4,7 @@ import argparse
 
 from sklearn.base import TransformerMixin
 
+from scripts.utils import time_count
 import scripts.semparse as semparse
 from scripts.semparse import sem_parse
 
@@ -30,7 +31,8 @@ class CCGSemParser(TransformerMixin):
         semparse.ARGS.gold_trees = gold_trees
         semparse.ARGS.nbest = nbest_output
         semparse.ARGS.ncores = use_ncores
-        
+    
+    @time_count
     def transform(self, parse_data: ParseData) -> ParseData:
         # this will extend the parse tree with semantic nodes
         sem_parse(parse_data.parse_result)

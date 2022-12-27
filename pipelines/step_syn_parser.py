@@ -5,6 +5,7 @@ import shlex
 
 from sklearn.base import TransformerMixin
 
+from scripts.utils import time_count
 from pipelines.data_types import ParseData
 from en.candc2transccg import translate_candc_tree
 
@@ -49,7 +50,8 @@ class CCGSynParser(TransformerMixin):
                           f"--models {self.model_path} " +
                           f"--candc-printer {self.parser_printer} " +
                           f"--input {input_file} --output {output_file}")
-                 
+    
+    @time_count
     def transform(self, input_file: str) -> ParseData:
         """parse tokenized sentences to XML trees"""
         assert os.path.exists(input_file)
