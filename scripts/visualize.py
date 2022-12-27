@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 #  Copyright 2015 Pascual Martinez-Gomez
@@ -27,6 +27,21 @@ from visualization_tools import convert_root_to_mathml
 from visualization_vertical_tools import convert_vertical_to_mathml
 from visualization_latex import convert_doc_to_latex
 
+from scripts.xml_utils import deserialize_file_to_tree
+
+def visualize_parse_tree(root, args):
+    if args.format == "plain":
+        html_str = convert_root_to_mathml(root)
+        print(html_str)
+
+    if args.format == "vertical":
+        html_str = convert_vertical_to_mathml(root)
+        print(html_str)
+
+    if args.format == "latex":
+        latex_str = convert_doc_to_latex(root)
+        print(latex_str)
+    
 def main(args = None):
     DESCRIPTION=textwrap.dedent("""\
             Prints graphically in HTML the CCG tree. If <semantics> content
@@ -53,20 +68,8 @@ def main(args = None):
     
     logging.basicConfig(level=logging.WARNING)
 
-    parser = etree.XMLParser(remove_blank_text=True)
-    root = etree.parse(args.trees_xml, parser)
-
-    if args.format == "plain":
-        html_str = convert_root_to_mathml(root)
-        print(html_str)
-
-    if args.format == "vertical":
-        html_str = convert_vertical_to_mathml(root)
-        print(html_str)
-
-    if args.format == "latex":
-        latex_str = convert_doc_to_latex(root)
-        print(latex_str)
+    root = deserialize_file_to_tree(args.trees_xml)
+    visualize_parse_tree(root, args)
 
 if __name__ == '__main__':
     main()

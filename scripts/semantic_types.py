@@ -20,6 +20,7 @@ from copy import deepcopy
 import functools
 import logging
 import re
+import os
 
 from nltk import Tree
 from nltk.sem.logic import ENTITY_TYPE
@@ -42,7 +43,7 @@ from logic_parser import lexpr
 from normalization import normalize_token, substitute_invalid_chars
 from tree_tools import tree_or_string
 
-COQLIB_PATH='coqlib.v'
+COQLIB_PATH = os.environ["COQ_LIB_PATH"]
 def get_reserved_preds_from_coq_static_lib(coq_static_lib_path):
     finput = codecs.open(coq_static_lib_path, 'r', 'utf-8')
     type_definitions = \

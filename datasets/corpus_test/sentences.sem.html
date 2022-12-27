@@ -644,14 +644,6 @@
 </mfrac>
 </math>
 
-<p>Script piped to coq</p><pre>
-Require Export coqlib.
-Parameter _coffee : Entity -> Prop.
-Parameter _order : Entity -> (Entity -> Prop).
-Parameter _tea : Entity -> Prop.
-Parameter _woman : Entity -> Prop.
-Theorem t1: (forall x, ((_woman x) -> (True -> (exists z1, (and (and (or (_tea z1) (_coffee z1)) True) (_order x z1)))))) -> (exists x, (and (and (_woman x) True) (not (exists z1, (and (and (_coffee z1) True) (_order x z1)))))) -> (exists x, (and (and (_woman x) True) (exists z1, (and (and (_tea z1) True) (_order x z1))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.
-</pre>
     </body>
     </html>
     

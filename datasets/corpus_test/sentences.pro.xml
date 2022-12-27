@@ -122,6 +122,39 @@
         </semantics>
       </sentence>
     </sentences>
+    <proof status="success" inference_result="yes">
+      <master_theorem>
+        <theorems>
+          <parser_labels>
+            <parser_label ccg_id="s0_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s1_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s2_ccg0" ccg_parser="None"/>
+          </parser_labels>
+          <premises>
+            <premise>all x.(_woman(x) -&gt; (TrueP -&gt; exists z1.((_tea(z1) | _coffee(z1)) &amp; TrueP &amp; _order(x,z1))))</premise>
+            <premise>exists x.(_woman(x) &amp; TrueP &amp; -exists z1.(_coffee(z1) &amp; TrueP &amp; _order(x,z1)))</premise>
+          </premises>
+          <conclusion>exists x.(_woman(x) &amp; TrueP &amp; exists z1.(_tea(z1) &amp; TrueP &amp; _order(x,z1)))</conclusion>
+          <dynamic_library>Parameter _coffee : Entity -&gt; Prop.
+Parameter _order : Entity -&gt; (Entity -&gt; Prop).
+Parameter _tea : Entity -&gt; Prop.
+Parameter _woman : Entity -&gt; Prop.</dynamic_library>
+          <direct_definition>(forall x, ((_woman x) -&gt; (True -&gt; (exists z1, (and (and (or (_tea z1) (_coffee z1)) True) (_order x z1)))))) -&gt; (exists x, (and (and (_woman x) True) (not (exists z1, (and (and (_coffee z1) True) (_order x z1)))))) -&gt; (exists x, (and (and (_woman x) True) (exists z1, (and (and (_tea z1) True) (_order x z1)))))</direct_definition>
+          <reverse_definition>(exists x, (and (and (_woman x) True) (exists z1, (and (and (_tea z1) True) (_order x z1))))) -&gt; (exists x, (and (and (_woman x) True) (not (exists z1, (and (and (_coffee z1) True) (_order x z1)))))) -&gt; (forall x, ((_woman x) -&gt; (True -&gt; (exists z1, (and (and (or (_tea z1) (_coffee z1)) True) (_order x z1))))))</reverse_definition>
+          <direct_definition_neg>(forall x, ((_woman x) -&gt; (True -&gt; (exists z1, (and (and (or (_tea z1) (_coffee z1)) True) (_order x z1)))))) -&gt; (exists x, (and (and (_woman x) True) (not (exists z1, (and (and (_coffee z1) True) (_order x z1)))))) -&gt; (not (exists x, (and (and (_woman x) True) (exists z1, (and (and (_tea z1) True) (_order x z1))))))</direct_definition_neg>
+          <reverse_definition_neg>(not (exists x, (and (and (_woman x) True) (exists z1, (and (and (_tea z1) True) (_order x z1)))))) -&gt; (exists x, (and (and (_woman x) True) (not (exists z1, (and (and (_coffee z1) True) (_order x z1)))))) -&gt; (forall x, ((_woman x) -&gt; (True -&gt; (exists z1, (and (and (or (_tea z1) (_coffee z1)) True) (_order x z1))))))</reverse_definition_neg>
+          <theorem inference_result="yes" is_negated="False">
+            <coq_script>Require Export coqlib.
+Parameter _coffee : Entity -&gt; Prop.
+Parameter _order : Entity -&gt; (Entity -&gt; Prop).
+Parameter _tea : Entity -&gt; Prop.
+Parameter _woman : Entity -&gt; Prop.
+Theorem t1: (forall x, ((_woman x) -&gt; (True -&gt; (exists z1, (and (and (or (_tea z1) (_coffee z1)) True) (_order x z1)))))) -&gt; (exists x, (and (and (_woman x) True) (not (exists z1, (and (and (_coffee z1) True) (_order x z1)))))) -&gt; (exists x, (and (and (_woman x) True) (exists z1, (and (and (_tea z1) True) (_order x z1))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.</coq_script>
+            <failure_log/>
+          </theorem>
+        </theorems>
+      </master_theorem>
+    </proof>
   </document>
 </root>
 
