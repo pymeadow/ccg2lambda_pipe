@@ -24,8 +24,6 @@ def main():
     args = parser.parse_args()
     config_log(args.log_level)
 
-    tree_visualizer = CCGTreeVisualizer()
-
     # construct a reusable pipeline for different input
     basic_pipe = Pipeline([
         ("corpus_reader", CorpusReader()),
@@ -33,13 +31,13 @@ def main():
         ("corpus_writer", CorpusWriter()),
         ("syn_parser", CCGSynParser()),
         ("syn_writer", CCGTreeWriter(output_suffix="syn.xml", output_encode=None)),
-        ("syn_visual", tree_visualizer),
+        ("syn_visual", CCGTreeVisualizer(output_suffix="syn")),
         ("sem_parser", CCGSemParser()),
         ("sem_writer", CCGTreeWriter(output_suffix="sem.xml")),
-        ("sem_visual", tree_visualizer),
+        ("sem_visual", CCGTreeVisualizer(output_suffix="sem")),
         ("entail_prover", COQEntailmentProver()),
         ("proof_writer", CCGTreeWriter(output_suffix="pro.xml")),
-        ("proof_visual", tree_visualizer),
+        ("proof_visual", CCGTreeVisualizer(output_suffix="pro")),
         ("pivot", "passthrough")
         ])
     
