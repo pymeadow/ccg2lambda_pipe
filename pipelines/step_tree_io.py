@@ -1,6 +1,8 @@
 """Steps and utilities to read/write information from/to CCG trees"""
 import os
 import logging
+from logging import FileHandler
+
 import dataclasses as dc
 
 from sklearn.base import TransformerMixin
@@ -10,12 +12,23 @@ import lxml
 from pipelines.data_types import ParseData
 from scripts.xml_utils import serialize_tree_to_file, deserialize_file_to_tree
 
+
 my_logger = logging.getLogger(__name__)
 
 #===================================================
 # Basic tree IO steps
 #===================================================
 
+class XMLLogHandler(FileHandler):
+    def __init__(self, xml_tree, output_file, output_encode):
+        super().__init__(output_file, encoding=output_encode)
+        self.xml_tree = xml_tree
+
+    def emit(self, record):
+        serialize_tree_to_file(self.xml_tree, 
+                               self.baseFilename, 
+                               encoding=self.encoding)
+        
 class CCGTreeReader(TransformerMixin):
     """load CCG tree from file into memory"""
     def __init__(self):
@@ -68,9 +81,11 @@ class CCGTreeWriter(TransformerMixin):
             output_encode = parse_data.parse_encode
         assert(output_encode)
 
-        serialize_tree_to_file(parse_data.parse_result, 
-                               output_file, 
-                               encoding=output_encode)
+        xml_logger = logging.getLogger(__name__)
+        xml_handler = XMLLogHandler(parse_data.parse_result, output_file, output_encode)
+        xml_logger.addHandler(xml_handler)
+        xml_logger.debug(f"save result to {output_file}")
+
         # return a parse data object
         return dc.replace(parse_data, output_file=output_file)
 
@@ -81,6 +96,8 @@ if __name__ == "__main__":
     # load xml file into memory then save it back to the same file
     # use git status to check the file didn't change
     from sklearn.pipeline import Pipeline
+    logging.basicConfig(level=logging.INFO)
+
     tree_reader = CCGTreeReader()
     tree_writer = CCGTreeWriter(output_suffix="pro.xml")
     io_pipe = Pipeline([

@@ -1,6 +1,11 @@
 """Implement pipelines/pipeline.bash with a scikit-learn Pipeline"""
 
+import argparse
+import logging
+
 from sklearn.pipeline import Pipeline
+
+from pipelines.log_utils import config_log
 
 from en.step_tokenizer import WordTokenizer
 from pipelines.step_corpus_io import CorpusReader, CorpusWriter
@@ -10,7 +15,15 @@ from pipelines.step_sem_parser import CCGSemParser
 from pipelines.step_entail_prover import COQEntailmentProver
 from pipelines.step_tree_visualizer import CCGTreeVisualizer
 
+my_logger = logging.getLogger(__name__)
+
 def main():
+    parser = argparse.ArgumentParser(description="Textual Entailment Pipeline")
+    parser.add_argument("--log_level", help="log level", type=str,
+                        default="INFO")
+    args = parser.parse_args()
+    config_log(args.log_level)
+
     tree_visualizer = CCGTreeVisualizer()
 
     # construct a reusable pipeline for different input
@@ -33,7 +46,7 @@ def main():
     input_file = "datasets/corpus_test/sentences.tok.txt"
     basic_pipe.set_params(corpus_writer__input_file=input_file)
     parse_data = basic_pipe.transform(input_file)
-    print(f"{input_file} => {parse_data}")
+    my_logger.info(f"{input_file} => {parse_data}")
 
 main()
 
