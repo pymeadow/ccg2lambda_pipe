@@ -20,7 +20,7 @@ my_logger = logging.getLogger(__name__)
 def main():
     parser = argparse.ArgumentParser(description="Textual Entailment Pipeline")
     parser.add_argument("--log_level", help="log level", type=str,
-                        default="INFO")
+                        default="DEBUG")
     args = parser.parse_args()
     config_log(args.log_level)
 
