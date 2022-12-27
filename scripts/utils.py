@@ -23,7 +23,8 @@ def time_count(fn):
   def _wrapper(*args, **kwargs):
     start = time.perf_counter()
     returns = fn(*args, **kwargs)
-    logging.debug("[time_count]: %s took %fs" % (fn.__name__, time.perf_counter() - start))
+    logging.debug("[time_count]: %s(%s,%s) took %fs" % (fn.__name__, args, kwargs,
+                                                        time.perf_counter() - start))
     return returns
   return _wrapper
 

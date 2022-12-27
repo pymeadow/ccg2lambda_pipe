@@ -41,6 +41,8 @@ class CCGSemParser(TransformerMixin):
 if __name__ == "__main__":
     from pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
     
+    logging.basicConfig(level=logging.DEBUG)
+
     tree_reader = CCGTreeReader()
     tree_writer = CCGTreeWriter(output_suffix="sem.xml", output_encode="utf-8")
     parse_data = tree_reader.transform("datasets/corpus_test/sentences.syn.xml")

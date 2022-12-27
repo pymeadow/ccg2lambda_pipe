@@ -85,10 +85,18 @@ class CCGSynParser(TransformerMixin):
 # unit test
 if __name__ == "__main__":
     import lxml
+    from pipelines.step_tree_io import CCGTreeWriter
+    
+    logging.basicConfig(level=logging.DEBUG)
 
     ccg_parser = CCGSynParser()
-    parse_data = ccg_parser.transform("datasets/corpus_test/sentences.tok.txt")
-    print(f"{parse_data}")
+    input_file = "datasets/corpus_test/sentences.tok.txt"
+    parse_data = ccg_parser.transform(input_file)
     assert type(parse_data.parse_result) is lxml.etree._Element
     assert parse_data.parse_encode == "UTF-8"
     assert parse_data.output_file == "datasets/corpus_test/sentences.candc.xml"
+
+    tree_writer = CCGTreeWriter(output_suffix="syn.xml", output_encode=None)
+    parse_data = tree_writer.transform(parse_data)
+    print(f"{input_file} => {parse_data}")
+    

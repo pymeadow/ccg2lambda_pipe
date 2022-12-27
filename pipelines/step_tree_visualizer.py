@@ -27,6 +27,8 @@ class XMLLogHandler(FileHandler):
         with open(self.baseFilename, "w") as out_file:
             with contextlib.redirect_stdout(out_file):
                 visualize_parse_tree(self.xml_tree, self.args)
+        self.flush()
+        
 
 class CCGTreeVisualizer(TransformerMixin):
     """Adapt scripts/visualizer.py to scikit-learn transformer"""
@@ -65,6 +67,7 @@ class CCGTreeVisualizer(TransformerMixin):
         xml_handler = XMLLogHandler(parse_data.parse_result, output_file, self.args)
         xml_logger.addHandler(xml_handler)
         xml_logger.debug(f"save result to {output_file}")
+        xml_logger.removeHandler(xml_handler)
         
         # return a new parse data
         return dc.replace(parse_data, output_file=output_file)

@@ -24,10 +24,11 @@ class XMLLogHandler(FileHandler):
         super().__init__(output_file, encoding=output_encode)
         self.xml_tree = xml_tree
 
-    def emit(self, record):
+    def emit(self, _record):
         serialize_tree_to_file(self.xml_tree, 
                                self.baseFilename, 
                                encoding=self.encoding)
+        self.flush()
         
 class CCGTreeReader(TransformerMixin):
     """load CCG tree from file into memory"""
@@ -85,6 +86,7 @@ class CCGTreeWriter(TransformerMixin):
         xml_handler = XMLLogHandler(parse_data.parse_result, output_file, output_encode)
         xml_logger.addHandler(xml_handler)
         xml_logger.debug(f"save result to {output_file}")
+        xml_logger.removeHandler(xml_handler)
 
         # return a parse data object
         return dc.replace(parse_data, output_file=output_file)
