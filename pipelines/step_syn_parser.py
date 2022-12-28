@@ -71,7 +71,9 @@ class CCGSynParser(TransformerMixin):
         # run the external parsers with the files
         parse_command = shlex.split(self.ccg_parse.format(input_file, output_file))
         try:
-            completed_process = subprocess.run(parse_command, check=True)
+            completed_process = subprocess.run(parse_command, check=True, 
+                                               stdout=subprocess.DEVNULL,
+                                               stderr=subprocess.STDOUT)
             # transccg_root is the root element, not the entire document
             transccg_root, encoding = translate_candc_tree(output_file, self.log_file)
             parse_data = ParseData(parse_result=transccg_root, 

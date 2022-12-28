@@ -211,7 +211,7 @@ def translate_candc_tree(xml_fname, log_fname):
         transccg_trees.append(transccg_tree)
         sentence_num += 1
 
-    print('Produced {0} transccg trees'.format(len(transccg_trees)), file=sys.stderr)
+    logging.debug('Produced {0} transccg trees'.format(len(transccg_trees)), file=sys.stderr)
     transccg_xml_tree = make_transccg_xml_tree(transccg_trees)
     return transccg_xml_tree, xml_tree.docinfo.encoding
 
