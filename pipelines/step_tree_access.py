@@ -1,6 +1,7 @@
 import logging
 from dataclasses import dataclass
 from typing import List
+import copy
 
 from lxml import etree
 from scripts.theorem import generate_semantics_from_doc
@@ -46,11 +47,18 @@ class CCGTree():
         to derive the composite context without reparsing 
         the sentences
         """
-        merged_sentences = self.ccg_tree.xpath('//sentences')[0]
+        # copy-on-write the tree, so it can be rejoined
+        merged_tree = copy.deepcopy(self.ccg_tree)
+        merged_sentences = merged_tree.xpath('//sentences')[0]
         source_sentences = ccg_tree.ccg_tree.xpath('//sentences')[0]
         for sent_node in source_sentences.getiterator("sentence"):
             merged_sentences.append(sent_node)
-        return self       
+        
+        merged_ccg = CCGTree(merged_tree,
+                             use_gold_trees=self.use_gold_trees,
+                             max_sentences=self.max_sentences,
+                             min_sentences=self.min_sentences)
+        return merged_ccg       
         
     def get_doc_semantics(self, doc_element: etree._Element) -> List[CorpusSemantics]:
         """retrieve the semantic data for a collection of sentences of a document"""

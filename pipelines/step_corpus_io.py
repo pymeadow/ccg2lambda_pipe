@@ -24,6 +24,9 @@ class CorpusWriter(TransformerMixin):
                  token_delimiter: str =" ",
                  output_suffix="tok.txt"):
         """initialization"""
+        if output_dir and not os.path.exists(output_dir):
+            os.makedirs(output_dir, exist_ok=True)
+
         self.output_dir = output_dir
         self.output_file = None
         self.token_delimiter = token_delimiter
