@@ -19,25 +19,25 @@ input_dir=$(dirname $INPUT_PATH)
 input_file=$(basename $INPUT_PATH .txt)
 
 token_file=$input_dir/$input_file.tok.txt
-cat $INPUT_PATH | python3 ccg2lamp/en/tokenizer.py > $token_file
+cat $INPUT_PATH | python -m ccg2lamp.en.tokenizer > $token_file
 
 candc_xml=$input_dir/$input_file.candc.xml
 ./candc-1.00/bin/candc --models candc-1.00/models --candc-printer xml --input $token_file > $candc_xml
 
 parse_xml=$input_dir/$input_file.syn.xml
-ccg2lamp/en/candc2transccg.py $candc_xml > $parse_xml
+python -m ccg2lamp.en.candc2transccg $candc_xml > $parse_xml
 
 parse_html=$input_dir/${input_file}.syn.html
-ccg2lamp/scripts/visualize.py $parse_xml > $parse_html
+python -m ccg2lamp.scripts.visualize $parse_xml > $parse_html
 
 sem_xml=$input_dir/$input_file.sem.xml
-ccg2lamp/scripts/semparse.py $parse_xml ccg2lamp/en/semantic_templates_en_emnlp2015.yaml $sem_xml
+python -m ccg2lamp.scripts.semparse $parse_xml ccg2lamp/en/semantic_templates_en_emnlp2015.yaml $sem_xml
 
 sem_html=$input_dir/${input_file}.sem.html
-ccg2lamp/scripts/visualize.py $sem_xml > $sem_html
+python -m ccg2lamp.scripts.visualize $sem_xml > $sem_html
 
 entail_html=$input_dir/${input_file}.pro.html
 proof_xml=$input_dir/${input_file}.pro.xml
-ccg2lamp/scripts/prove.py $sem_xml --proof $proof_xml --graph_out $entail_html
+python -m ccg2lamp.scripts.prove $sem_xml --proof $proof_xml --graph_out $entail_html
 
 set +x
