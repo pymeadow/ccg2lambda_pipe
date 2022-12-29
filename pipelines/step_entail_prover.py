@@ -43,6 +43,8 @@ class COQEntailmentProver(TransformerMixin):
 # unit test
 if __name__ == "__main__":
     from pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
+    logging.basicConfig(level=logging.DEBUG)
+
     tree_reader = CCGTreeReader()
     input_file = "datasets/corpus_test/sentences.sem.xml"
     parse_data = tree_reader.transform(input_file)
@@ -51,3 +53,4 @@ if __name__ == "__main__":
     tree_writer = CCGTreeWriter(output_suffix="pro.xml")
     tree_writer.transform(parse_data)
     print(f"output_file={parse_data}")
+    # use git status to check datasets/corpus_test/sentences.pro.xml

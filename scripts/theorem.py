@@ -313,13 +313,11 @@ def run_coq_script(coq_script, timeout=100):
     """
     coq_script = substitute_invalid_chars(coq_script, 'replacement.txt')
     try:
-        ps = subprocess.Popen(('echo', coq_script), stdout=subprocess.PIPE)
         output = subprocess.check_output(
             ('coqtop',),
-            stdin=ps.stdout,
+            input=coq_script.encode('utf-8'),
             stderr=subprocess.STDOUT,
             timeout=timeout)
-        ps.wait()
     except subprocess.CalledProcessError as e:
         logging.error(
             'Error when running the following script:\n{0}\nMessage was: {1}'.format(
