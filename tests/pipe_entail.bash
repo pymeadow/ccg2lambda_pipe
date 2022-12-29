@@ -10,7 +10,7 @@ fi
 set -x
 
 # change these variables if necessary to point to the correct folders
-export NLTK_DATA_PATH=~/nltk_data
+export NLTK_DATA=~/nltk_data
 export PYTHONPATH=.
 
 input_dir=$(dirname $INPUT_PATH)

@@ -1,8 +1,7 @@
-import os
+
 import logging
 import argparse
 
-import nltk
 from sklearn.base import TransformerMixin
 
 from .data_types import ParseData
@@ -22,9 +21,6 @@ class COQEntailmentProver(TransformerMixin):
         """initialize the prover with parameters
         Parameters:
         """
-        # set up NLTK resources
-        nltk.data.path = os.environ['NLTK_DATA_PATH'].split(":")
-        
         # set up parameters for the prover
         prover.ARGS = argparse.Namespace()
         prover.ARGS.abduction = do_abduction

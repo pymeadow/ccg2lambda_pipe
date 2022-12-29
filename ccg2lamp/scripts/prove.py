@@ -24,7 +24,6 @@ from lxml import etree
 from multiprocessing import Pool
 from multiprocessing import Lock
 import os
-from subprocess import CalledProcessError
 from subprocess import TimeoutExpired
 import sys
 import textwrap
@@ -96,10 +95,10 @@ def prove_entail(root):
     global ABDUCTION
 
     if ARGS.abduction == "spsa":
-        from abduction_spsa import AxiomsWordnet
+        from .abduction_spsa import AxiomsWordnet
         ABDUCTION = AxiomsWordnet()
     elif ARGS.abduction == "naive":
-        from abduction_naive import AxiomsWordnet
+        from .abduction_naive import AxiomsWordnet
         ABDUCTION = AxiomsWordnet()
 
     DOCS = root.findall('.//document')
@@ -178,6 +177,4 @@ def prove_doc_ind(document_ind):
     return etree.tostring(proof_node)
 
 if __name__ == '__main__':
-    import nltk
-    nltk.data.path = os.environ['NLTK_DATA_PATH'].split(":")
     main()

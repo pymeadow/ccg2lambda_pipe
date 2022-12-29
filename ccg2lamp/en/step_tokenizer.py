@@ -1,9 +1,8 @@
-import os
 from typing import List
 
 from sklearn.base import TransformerMixin
 
-import nltk
+#import nltk
 from nltk.tokenize import word_tokenize
 
 from ccg2lamp.scripts.utils import time_count
@@ -11,7 +10,7 @@ from ccg2lamp.scripts.utils import time_count
 class WordTokenizer(TransformerMixin):
     """NLTK tokenizer as scikit-learn transformer"""
     def __init__(self):
-        nltk.data.path = os.environ['NLTK_DATA_PATH'].split(":")
+        pass
 
     @time_count
     def transform(self, sentences: List[str]) -> List[List[str]]:
