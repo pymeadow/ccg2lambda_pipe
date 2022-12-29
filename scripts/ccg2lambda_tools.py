@@ -21,9 +21,9 @@ import simplejson
 from lxml import etree
 from nltk.sem.logic import ConstantExpression
 
-from logic_parser import lexpr
-from normalization import normalize_token
-import semantic_index
+from .logic_parser import lexpr
+from .normalization import normalize_token
+from . import semantic_index
 
 def build_ccg_tree(ccg_xml, root_id=None):
     """

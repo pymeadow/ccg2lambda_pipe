@@ -13,7 +13,7 @@ set -x
 export COQ_LIB_PATH=./coq_entail/coqlib.v
 export COQPATH=$(dirname $COQ_LIB_PATH)
 export NLTK_DATA_PATH=~/nltk_data
-export PYTHONPATH=.:scripts
+export PYTHONPATH=.
 
 input_dir=$(dirname $INPUT_PATH)
 input_file=$(basename $INPUT_PATH .txt)

@@ -192,7 +192,7 @@ def translate_candc_tree(xml_fname, log_fname):
     failed_inds = set()
     if log_fname:
         failed_inds = get_failed_inds_from_log(log_fname)
-        print('Found failures: {0}'.format(failed_inds), file=sys.stderr)
+        logging.debug('Found failures: {0}'.format(failed_inds))
 
     xml_tree = deserialize_file_to_tree(xml_fname)
     root = xml_tree.getroot()
@@ -206,12 +206,13 @@ def translate_candc_tree(xml_fname, log_fname):
             transccg_tree = etree.Element('sentence')
             transccg_trees.append(transccg_tree)
             sentence_num += 1
-            print('Make dummy node.', file=sys.stderr)
+            logging.debug('Make dummy node.')
         transccg_tree = candc_to_transccg(ccg_tree, sentence_num - 1)
         transccg_trees.append(transccg_tree)
         sentence_num += 1
 
-    logging.debug('Produced {0} transccg trees'.format(len(transccg_trees)), file=sys.stderr)
+    # default to stderr
+    logging.debug('Produced {0} transccg trees'.format(len(transccg_trees)))
     transccg_xml_tree = make_transccg_xml_tree(transccg_trees)
     return transccg_xml_tree, xml_tree.docinfo.encoding
 
@@ -235,12 +236,12 @@ def main(args=None):
     logging.basicConfig(level=logging.WARNING)
 
     if not os.path.exists(args.xml_fname):
-        print('C&C XML file does not exist: {0}'.format(args.xml_fname))
+        logging.debug('C&C XML file does not exist: {0}'.format(args.xml_fname))
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
     if args.log_fname != "" and not os.path.exists(args.log_fname):
-        print('C&C log file does not exist: {0}'.format(args.log_fname))
+        logging.debug('C&C log file does not exist: {0}'.format(args.log_fname))
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 

@@ -83,7 +83,7 @@ class CCGSynParser(TransformerMixin):
             my_logger.debug(f"{parse_command} -> {completed_process.returncode}")
         except Exception as error:
             parse_data = ParseData(parse_error=error)
-            my_logger.error(error)
+            my_logger.error(str(error))
         return parse_data
             
 # unit test

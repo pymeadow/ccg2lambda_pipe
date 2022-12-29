@@ -23,9 +23,9 @@ import os
 import sys
 import textwrap
 
-from visualization_tools import convert_root_to_mathml
-from visualization_vertical_tools import convert_vertical_to_mathml
-from visualization_latex import convert_doc_to_latex
+from .visualization_tools import convert_root_to_mathml
+from .visualization_vertical_tools import convert_vertical_to_mathml
+from .visualization_latex import convert_doc_to_latex
 
 from scripts.xml_utils import deserialize_file_to_tree
 
