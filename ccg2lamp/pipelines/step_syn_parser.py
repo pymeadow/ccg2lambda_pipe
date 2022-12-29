@@ -5,9 +5,9 @@ import shlex
 
 from sklearn.base import TransformerMixin
 
-from scripts.utils import time_count
-from pipelines.data_types import ParseData
-from en.candc2transccg import translate_candc_tree
+from ccg2lamp.scripts.utils import time_count
+from .data_types import ParseData
+from ccg2lamp.en.candc2transccg import translate_candc_tree
 
 my_logger = logging.getLogger(__name__)
 
@@ -89,7 +89,7 @@ class CCGSynParser(TransformerMixin):
 # unit test
 if __name__ == "__main__":
     import lxml
-    from pipelines.step_tree_io import CCGTreeWriter
+    from ccg2lamp.pipelines.step_tree_io import CCGTreeWriter
     
     logging.basicConfig(level=logging.DEBUG)
 

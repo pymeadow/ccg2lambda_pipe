@@ -5,15 +5,15 @@ import logging
 
 from sklearn.pipeline import Pipeline
 
-from pipelines.log_utils import config_log
+from ccg2lamp.pipelines.log_utils import config_log
 
-from en.step_tokenizer import WordTokenizer
-from pipelines.step_corpus_io import CorpusReader, CorpusWriter
-from pipelines.step_tree_io import CCGTreeWriter
-from pipelines.step_syn_parser import CCGSynParser
-from pipelines.step_sem_parser import CCGSemParser
-from pipelines.step_entail_prover import COQEntailmentProver
-from pipelines.step_tree_visualizer import CCGTreeVisualizer
+from ccg2lamp.en.step_tokenizer import WordTokenizer
+from ccg2lamp.pipelines.step_corpus_io import CorpusReader, CorpusWriter
+from ccg2lamp.pipelines.step_tree_io import CCGTreeWriter
+from ccg2lamp.pipelines.step_syn_parser import CCGSynParser
+from ccg2lamp.pipelines.step_sem_parser import CCGSemParser
+from ccg2lamp.pipelines.step_entail_prover import COQEntailmentProver
+from ccg2lamp.pipelines.step_tree_visualizer import CCGTreeVisualizer
 
 my_logger = logging.getLogger(__name__)
 

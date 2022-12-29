@@ -5,11 +5,11 @@ import argparse
 import nltk
 from sklearn.base import TransformerMixin
 
-from pipelines.data_types import ParseData
+from .data_types import ParseData
 
-from scripts.utils import time_count
-import scripts.prove as prover
-from scripts.prove import prove_entail
+from ccg2lamp.scripts.utils import time_count
+import ccg2lamp.scripts.prove as prover
+from ccg2lamp.scripts.prove import prove_entail
 
 my_logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class COQEntailmentProver(TransformerMixin):
 
 # unit test
 if __name__ == "__main__":
-    from pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
+    from ccg2lamp.pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
     logging.basicConfig(level=logging.DEBUG)
 
     tree_reader = CCGTreeReader()

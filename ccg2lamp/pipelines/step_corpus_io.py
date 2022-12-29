@@ -60,7 +60,7 @@ class CorpusWriter(TransformerMixin):
 # unit test
 if __name__ == "__main__":
     from sklearn.pipeline import Pipeline
-    from en.step_tokenizer import WordTokenizer
+    from ccg2lamp.en.step_tokenizer import WordTokenizer
     
     pipe = Pipeline([
         ("reader", CorpusReader()),

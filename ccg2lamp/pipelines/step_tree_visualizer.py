@@ -7,8 +7,8 @@ from logging import FileHandler
 
 from sklearn.base import TransformerMixin
 
-from pipelines.data_types import ParseData
-from scripts.visualize import visualize_parse_tree
+from .data_types import ParseData
+from ccg2lamp.scripts.visualize import visualize_parse_tree
 
 my_logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ class CCGTreeVisualizer(TransformerMixin):
 
 # unit test
 if __name__ == "__main__":
-    from pipelines.step_tree_io import CCGTreeReader    
+    from ccg2lamp.pipelines.step_tree_io import CCGTreeReader    
     logging.basicConfig(level=logging.DEBUG)
 
     tree_reader = CCGTreeReader()

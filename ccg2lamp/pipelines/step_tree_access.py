@@ -4,8 +4,8 @@ from typing import List
 import copy
 
 from lxml import etree
-from scripts.theorem import generate_semantics_from_doc
-from scripts.semantic_types import get_dynamic_library_from_doc
+from ccg2lamp.scripts.theorem import generate_semantics_from_doc
+from ccg2lamp.scripts.semantic_types import get_dynamic_library_from_doc
 
 #===================================================
 # Tree utilities to support custom steps
@@ -93,7 +93,7 @@ class CCGTree():
         
 # unit test
 if __name__ == "__main__":
-    from pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
+    from ccg2lamp.pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
     logging.basicConfig(level=logging.DEBUG)
 
     data_1 = CCGTreeReader().transform("datasets/corpus_test/sentences.sem.1.xml")

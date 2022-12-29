@@ -4,11 +4,11 @@ import argparse
 
 from sklearn.base import TransformerMixin
 
-from scripts.utils import time_count
-import scripts.semparse as semparse
-from scripts.semparse import sem_parse
+from ccg2lamp.scripts.utils import time_count
+import ccg2lamp.scripts.semparse as semparse
+from ccg2lamp.scripts.semparse import sem_parse
 
-from pipelines.data_types import ParseData
+from .data_types import ParseData
 
 my_logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class CCGSemParser(TransformerMixin):
 
 # unit test
 if __name__ == "__main__":
-    from pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
+    from ccg2lamp.pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
     
     logging.basicConfig(level=logging.DEBUG)
 

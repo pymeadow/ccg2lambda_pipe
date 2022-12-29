@@ -9,8 +9,8 @@ from sklearn.base import TransformerMixin
 
 import lxml
 
-from pipelines.data_types import ParseData
-from scripts.xml_utils import serialize_tree_to_file, deserialize_file_to_tree
+from .data_types import ParseData
+from ccg2lamp.scripts.xml_utils import serialize_tree_to_file, deserialize_file_to_tree
 
 
 my_logger = logging.getLogger(__name__)
