@@ -15,6 +15,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import ccg2lamp
+
 import codecs
 from collections import OrderedDict
 import itertools
@@ -295,7 +297,7 @@ def make_coq_script(premise_interpretations, conclusion, dynamic_library = '', a
         dynamic_library, coq_formulae, tactics)
     if axioms is not None and len(axioms) > 0:
         coq_script = insert_axioms_in_coq_script(axioms, coq_script)
-    coq_script = substitute_invalid_chars(coq_script, 'replacement.txt')
+    coq_script = substitute_invalid_chars(coq_script, ccg2lamp.CCG2LAMP_REPLACEMENT_FILE)
     return coq_script
 
 def prove_script(coq_script, timeout=100):
@@ -311,7 +313,7 @@ def run_coq_script(coq_script, timeout=100):
       Theorem t1 ... <tactics>. Qed.
     Returns the output lines.
     """
-    coq_script = substitute_invalid_chars(coq_script, 'replacement.txt')
+    coq_script = substitute_invalid_chars(coq_script, ccg2lamp.CCG2LAMP_REPLACEMENT_FILE)
     try:
         output = subprocess.check_output(
             ('coqtop',),

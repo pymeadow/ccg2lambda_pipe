@@ -5,6 +5,7 @@ import shlex
 
 from sklearn.base import TransformerMixin
 
+import ccg2lamp
 from ccg2lamp.scripts.utils import time_count
 from .data_types import ParseData
 from ccg2lamp.en.candc2transccg import translate_candc_tree
@@ -13,20 +14,16 @@ my_logger = logging.getLogger(__name__)
 
 class CCGSynParser(TransformerMixin):
     """Adapt C&C parser to scikit-learn transformer"""
-    def __init__(self, parser_exe: str = "candc-1.00/bin/candc",
-                 config_file: str = None,
-                 model_path: str = "candc-1.00/models",
+    def __init__(self, config_file: str = None,
                  parser_printer: str = "xml",
                  log_file: str = None,
                  output_dir: str = None):
-        assert os.path.exists(parser_exe)
-        assert os.path.exists(model_path)
 
         # figure out the command to run the parser
-        self.parser_exe = parser_exe
-        self.parser_name = os.path.splitext(os.path.basename(parser_exe))[0]
+        self.parser_exe = ccg2lamp.CCG2LAMP_PARSER_EXE
+        self.parser_name = os.path.splitext(os.path.basename(self.parser_exe))[0]
         self.config_file = config_file
-        self.model_path = model_path
+        self.model_path = ccg2lamp.CCG2LAMP_PARSER_MODEL
         self.parser_printer = parser_printer
         self.log_file = log_file
         self.output_dir = output_dir

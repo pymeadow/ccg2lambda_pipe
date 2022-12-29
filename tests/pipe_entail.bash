@@ -10,8 +10,6 @@ fi
 set -x
 
 # change these variables if necessary to point to the correct folders
-export COQ_LIB_PATH=./coq_entail/coqlib.v
-export COQPATH=$(dirname $COQ_LIB_PATH)
 export NLTK_DATA_PATH=~/nltk_data
 export PYTHONPATH=.
 

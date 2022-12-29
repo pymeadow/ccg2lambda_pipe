@@ -1,9 +1,9 @@
-import os
 import logging
 import argparse
 
 from sklearn.base import TransformerMixin
 
+import ccg2lamp
 from ccg2lamp.scripts.utils import time_count
 import ccg2lamp.scripts.semparse as semparse
 from ccg2lamp.scripts.semparse import sem_parse
@@ -14,19 +14,17 @@ my_logger = logging.getLogger(__name__)
 
 class CCGSemParser(TransformerMixin):
     """Adapt scripts/semparse.py to scikit-learn transformer"""
-    def __init__(self, model_path: str = "ccg2lamp/en/semantic_templates_en_emnlp2015.yaml",
-                 arbitrary_types: bool = False, # for --arbi-types
+    def __init__(self, arbitrary_types: bool = False, # for --arbi-types
                  gold_trees: bool = False, # for --gold-trees
                  nbest_output: int = 0, # for --nbest
                  use_ncores: int = 3 # for --ncores
                  ):
-        assert os.path.exists(model_path)
         
-        self.model_path = model_path
+        self.model_path = ccg2lamp.CCG2LAMP_SEM_TEMPLATE
         
         # set up the global parameters for the semantic parser
         semparse.ARGS = argparse.Namespace()
-        semparse.ARGS.templates = model_path
+        semparse.ARGS.templates = self.model_path
         semparse.ARGS.arbi_types = arbitrary_types
         semparse.ARGS.gold_trees = gold_trees
         semparse.ARGS.nbest = nbest_output
