@@ -33,7 +33,7 @@ from .semantic_tools import prove_doc
 from .utils import time_count
 from .visualization_tools import convert_root_to_mathml
 
-from scripts.xml_utils import serialize_tree_to_file, deserialize_file_to_tree
+from .xml_utils import serialize_tree_to_file, deserialize_file_to_tree
 
 ARGS=None
 DOCS=None

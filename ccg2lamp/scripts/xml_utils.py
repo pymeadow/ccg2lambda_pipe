@@ -2,7 +2,7 @@ import codecs
 
 from lxml import etree
 
-from scripts.utils import time_count
+from ccg2lamp.scripts.utils import time_count
 
 def deserialize_file_to_tree(xml_fname):
     parser = etree.XMLParser(remove_blank_text=True)

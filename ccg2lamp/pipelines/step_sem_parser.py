@@ -14,7 +14,7 @@ my_logger = logging.getLogger(__name__)
 
 class CCGSemParser(TransformerMixin):
     """Adapt scripts/semparse.py to scikit-learn transformer"""
-    def __init__(self, model_path: str = "en/semantic_templates_en_emnlp2015.yaml",
+    def __init__(self, model_path: str = "ccg2lamp/en/semantic_templates_en_emnlp2015.yaml",
                  arbitrary_types: bool = False, # for --arbi-types
                  gold_trees: bool = False, # for --gold-trees
                  nbest_output: int = 0, # for --nbest

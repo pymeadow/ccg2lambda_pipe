@@ -27,7 +27,7 @@ from .visualization_tools import convert_root_to_mathml
 from .visualization_vertical_tools import convert_vertical_to_mathml
 from .visualization_latex import convert_doc_to_latex
 
-from scripts.xml_utils import deserialize_file_to_tree
+from .xml_utils import deserialize_file_to_tree
 
 def visualize_parse_tree(root, args):
     if args.format == "plain":

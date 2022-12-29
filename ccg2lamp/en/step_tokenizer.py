@@ -6,7 +6,7 @@ from sklearn.base import TransformerMixin
 import nltk
 from nltk.tokenize import word_tokenize
 
-from scripts.utils import time_count
+from ccg2lamp.scripts.utils import time_count
 
 class WordTokenizer(TransformerMixin):
     """NLTK tokenizer as scikit-learn transformer"""

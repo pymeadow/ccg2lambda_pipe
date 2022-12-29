@@ -24,7 +24,7 @@ import os
 import sys
 import textwrap
 
-from scripts.xml_utils import deserialize_file_to_tree
+from ccg2lamp.scripts.xml_utils import deserialize_file_to_tree
 
 def get_nodes_by_tag(root, tag):
     nodes = []
