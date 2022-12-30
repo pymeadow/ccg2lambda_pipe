@@ -33,6 +33,8 @@ class AxiomsWordnet(object):
         return TryNaiveAbduction(coq_scripts, doc)
 
 def TryNaiveAbduction(coq_scripts, doc):
+    # TODO: this raises an exception, because
+    # type(coq_scripts) is theorem
     assert len(coq_scripts) == 2
     direct_proof_script = coq_scripts[0]
     reverse_proof_script = coq_scripts[1]

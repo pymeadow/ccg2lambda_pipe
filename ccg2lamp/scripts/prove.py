@@ -144,6 +144,7 @@ def prove_doc_ind(document_ind):
     proof_node = etree.Element('proof')
     inference_result = 'unknown'
     try:
+        import pudb; pudb.set_trace()
         theorem = prove_doc(doc, ABDUCTION, ARGS)
         proof_node.set('status', 'success')
         inference_result = theorem.result
@@ -156,9 +157,14 @@ def prove_doc_ind(document_ind):
     except Exception as e:
         doc_id = doc.get('id', '(unspecified)')
         lock.acquire()
-        logging.error('An error occurred: {0}\nDoc ID: {1}\nTree XML:\n{2}'.format(
-            e, doc_id,
-            etree.tostring(doc, encoding='utf-8', pretty_print=True).decode('utf-8')))
+        
+        # get the source of exception
+        _exc_type, _exc_obj, tb = sys.exc_info()
+        line_no = tb.tb_lineno
+        file_name = tb.tb_frame.f_code.co_filename
+        xml_text = etree.tostring(doc, encoding='utf-8', pretty_print=True).decode('utf-8')
+        logging.error(f'Exception "{e}" from {file_name}:{line_no} for {doc_id}')
+
         lock.release()
         proof_node.set('status', 'failed')
         proof_node.set('inference_result', 'unknown')
