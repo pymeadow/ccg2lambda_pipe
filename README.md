@@ -1,9 +1,9 @@
 # 0 Introduction
 
-This repository adapts [the original Python scripts](./ORIG_README.md) to [Scikit-Learn transformers](https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html) that 
-can be configured and composed into different [Pipelines](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html).
+This repository adapts [the original Python scripts](./ORIG_README.md) to [Scikit-Learn transformers](https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html) such that 
+they can be configured and composed through an uniform interface.
 
-A working Scikit-Learn pipeline can be found [here](./tests/pipe_entail.py).
+[This example](./tests/pipe_entail.py) illustrates they can be composed into a [Scikit-Learn Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html):
 
 ```
     basic_pipe = Pipeline([
@@ -27,17 +27,20 @@ A working Scikit-Learn pipeline can be found [here](./tests/pipe_entail.py).
     parse_data = basic_pipe.transform(input_file)
 ```
 
-The pipeline accepts an input file of sentences, and produces a [parse data](ccg2lamp/pipelines/data_types.py) that contains sentence tokens, CCG parse tree, logic formulas, and COQ proof scripts.
+The pipeline accepts an input file of sentences, and produces [parse data](ccg2lamp/pipelines/data_types.py) that contain sentence tokens, CCG parse tree, logic formulas, and COQ proof scripts.
 
-The pipeline also saves the intermediate results in various XML and HTML files, as the original Python scripts do, by the inserted writer steps.
+The pipeline saves the intermediate XML and HTML files derived from the input file with the writer steps.
 
-The writer steps are optional, and they are controlled by the global logging level. 
+The writer steps are controlled by the global logging level. 
 They are turned off if the logging level is greater than DEBUG.
 
-The pipeline produces the same results as [the bash script](./tests/pipe_entail.bash), but 
+The pipeline produces the same files as [the bash script](./tests/pipe_entail.bash), but 
 it runs ~3.5x faster.
 
 The bottleneck of the pipeline is the C&C CCG parser, which is a Linux executable that accepts and produces files.
+
+A pipeline can be constructed from a Python dictionary or a json file by a PipeFactory, as illustrated in [this example](ccg2lamp/pipelines/pipe_factory.py).
+
 
 # 1 Installation
 

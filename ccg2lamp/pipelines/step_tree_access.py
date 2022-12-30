@@ -11,6 +11,18 @@ from ccg2lamp.scripts.semantic_types import get_dynamic_library_from_doc
 # Tree utilities to support custom steps
 #===================================================
 
+@ dataclass
+class EntailProof():
+    # represents an entailment inference over the document
+    # <document>
+    #    <proof status=, inference_result=>
+    #       <master_theorem>...</master_theorem>
+    #    </proof>
+    # </document>
+    status: str = "success" # success, timedout, failed
+    inference_result: str = "unknown" # yes, no, unknown
+    proof_node: etree._Element = None
+
 @dataclass
 class CorpusSemantics():
     # this represents one interpretation of a corpus
@@ -19,8 +31,12 @@ class CorpusSemantics():
     # dynamic_library contains the semantic context
     # i.e. semantic entities and relations for the
     # entire corpus
+    
+    # common entities/relations of the corpus
     dynamic_library: str
+    # one semantic node per sentence
     semantic_nodes: List[etree._Element]
+    # one logic formula per sentence
     logic_formulas: List[object]
 
 @dataclass
@@ -29,6 +45,8 @@ class DocumentSemantics():
     # a corpus can have many interpretations
     doc_node: etree._Element
     doc_sem: List[CorpusSemantics]
+    # common inference over the corpus
+    doc_infer: EntailProof = None
     
 class CCGTree():
     """access and transform semantic data in the XML tree"""
@@ -59,10 +77,22 @@ class CCGTree():
                              max_sentences=self.max_sentences,
                              min_sentences=self.min_sentences)
         return merged_ccg       
-        
+    
+    def get_entail_proof(self, doc_element: etree._Element) -> object:
+        """retrieve entailment proof of the document, if any"""
+        # a document has at most one inference derived 
+        # from many interpretations of its corpus
+        entail_proof = None
+        for proof_element in doc_element.getiterator("proof"):
+            entail_proof = EntailProof(status=proof_element.status,
+                                       inference_result=proof_element.inference_result,
+                                       proof_node=proof_element)
+        return entail_proof
+
     def get_doc_semantics(self, doc_element: etree._Element) -> List[CorpusSemantics]:
         """retrieve the semantic data for a collection of sentences of a document"""
         corpus_semantics = []
+
         # generate all possible interpretations of the corpus
         # sem_product = [semantics(s1) x ... x semantics(sn)]
         # where semantics(si) = [<semantics>{1, n_best}] for sentence si
@@ -79,6 +109,7 @@ class CCGTree():
                                      semantic_nodes=sent_semantics,
                                      logic_formulas=sent_formulas)
             corpus_semantics.append(result)
+            
         return corpus_semantics
         
     def get_semantics(self) -> List[DocumentSemantics]:
@@ -87,7 +118,10 @@ class CCGTree():
         doc_semantics = []
         for doc_node in doc_elements:
             doc_sem = self.get_doc_semantics(doc_node)
-            result = DocumentSemantics(doc_node=doc_node, doc_sem=doc_sem)
+            doc_infer = self.get_entail_proof(doc_node)
+            result = DocumentSemantics(doc_node=doc_node, 
+                                       doc_sem=doc_sem, 
+                                       doc_infer=doc_infer)
             doc_semantics.append(result)
         return doc_semantics
         
@@ -100,8 +134,15 @@ if __name__ == "__main__":
     data_2 = CCGTreeReader().transform("datasets/corpus_test/sentences.sem.2.xml")
     data_3 = CCGTreeReader().transform("datasets/corpus_test/sentences.sem.3.xml")
 
+    # test + operator
     # write the merged tree back to check it has been reconstructed
     m_tree = sum([CCGTree(data_2.parse_result), CCGTree(data_3.parse_result)], CCGTree(data_1.parse_result))
     tree_writer = CCGTreeWriter(output_suffix="sem.xml")
     data_3.parse_result = m_tree.ccg_tree
     tree_writer.transform(data_3)
+    
+    # test access functions
+    tree_sems = m_tree.get_semantics()
+    print(tree_sems)
+
+    
