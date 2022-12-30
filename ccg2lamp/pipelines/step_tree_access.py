@@ -1,53 +1,18 @@
-import logging
-from dataclasses import dataclass
 from typing import List
+import logging
 import copy
 
 from lxml import etree
 from ccg2lamp.scripts.theorem import generate_semantics_from_doc
 from ccg2lamp.scripts.semantic_types import get_dynamic_library_from_doc
 
+from ccg2lamp.pipelines.data_types import EntailProof, CorpusSemantics, DocumentSemantics
+
 #===================================================
 # Tree utilities to support custom steps
 #===================================================
 
-@ dataclass
-class EntailProof():
-    # represents an entailment inference over the document
-    # <document>
-    #    <proof status=, inference_result=>
-    #       <master_theorem>...</master_theorem>
-    #    </proof>
-    # </document>
-    status: str = "success" # success, timedout, failed
-    inference_result: str = "unknown" # yes, no, unknown
-    proof_node: etree._Element = None
 
-@dataclass
-class CorpusSemantics():
-    # this represents one interpretation of a corpus
-    # each sentence has n-best <semantics> elements
-    # each <semantics> node contains a root logic formula
-    # dynamic_library contains the semantic context
-    # i.e. semantic entities and relations for the
-    # entire corpus
-    
-    # common entities/relations of the corpus
-    dynamic_library: str
-    # one semantic node per sentence
-    semantic_nodes: List[etree._Element]
-    # one logic formula per sentence
-    logic_formulas: List[object]
-
-@dataclass
-class DocumentSemantics():
-    # a document contains a corpus: a collection of sentences
-    # a corpus can have many interpretations
-    doc_node: etree._Element
-    doc_sem: List[CorpusSemantics]
-    # common inference over the corpus
-    doc_infer: EntailProof = None
-    
 class CCGTree():
     """access and transform semantic data in the XML tree"""
     def __init__(self, root: etree._Element,
@@ -84,8 +49,8 @@ class CCGTree():
         # from many interpretations of its corpus
         entail_proof = None
         for proof_element in doc_element.getiterator("proof"):
-            entail_proof = EntailProof(status=proof_element.status,
-                                       inference_result=proof_element.inference_result,
+            entail_proof = EntailProof(status=proof_element.get("status"),
+                                       inference_result=proof_element.get("inference_result"),
                                        proof_node=proof_element)
         return entail_proof
 
@@ -142,7 +107,8 @@ if __name__ == "__main__":
     tree_writer.transform(data_3)
     
     # test access functions
-    tree_sems = m_tree.get_semantics()
+    data = CCGTreeReader().transform("datasets/corpus_test/sentences.pro.xml")
+    tree_sems = CCGTree(data.parse_result).get_semantics()
     print(tree_sems)
 
     

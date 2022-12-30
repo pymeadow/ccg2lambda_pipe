@@ -40,6 +40,8 @@ ABDUCTION=None
 kMaxTasksPerChild=None
 lock = Lock()
 
+my_logger = logging.getLogger(__name__)
+
 def main(args = None):
     global ARGS
     DESCRIPTION=textwrap.dedent("""\
@@ -74,7 +76,7 @@ def main(args = None):
     logging.basicConfig(level=logging.WARNING)
       
     if not os.path.exists(ARGS.sem):
-        print('File does not exist: {0}'.format(ARGS.sem), file=sys.stderr)
+        my_logger.debug('File does not exist: {0}'.format(ARGS.sem))
         parser.print_help(file=sys.stderr)
         sys.exit(1)
     
@@ -115,7 +117,6 @@ def prove_docs(document_inds, ncores=1):
         proof_nodes = prove_docs_seq(document_inds)
     else:
         proof_nodes = prove_docs_par(document_inds, ncores)
-    print('', file=sys.stdout)
     proof_nodes = [etree.fromstring(p) for p in proof_nodes]
     return proof_nodes
 
@@ -169,9 +170,9 @@ def prove_doc_ind(document_ind):
     if ARGS.print_length == 'full':
         pair_id = doc.get('pair_id', '').strip()
         result = '{0} {1}'.format(pair_id, label) if len(pair_id) > 0 else label
-        print(result, end='\n', file=sys.stdout)
+        my_logger.debug(result)
     elif ARGS.print_length == 'short':
-        print(label[0], end='', file=sys.stdout)
+        my_logger.debug(label[0])
     lock.release()
     sys.stdout.flush()
     return etree.tostring(proof_node)
