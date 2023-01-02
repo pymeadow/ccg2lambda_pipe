@@ -19,7 +19,7 @@ class CCGTree():
                  use_gold_trees: bool = False,
                  max_sentences: int = 100,
                  min_sentences: int = 1):
-        assert root
+        assert root is not None
         self.ccg_tree = root
         self.max_sentences = max_sentences
         self.min_sentences = min_sentences
