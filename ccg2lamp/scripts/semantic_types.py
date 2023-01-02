@@ -45,6 +45,8 @@ from .logic_parser import lexpr
 from .normalization import normalize_token, substitute_invalid_chars
 from .tree_tools import tree_or_string
 
+my_logger = logging.getLogger(__name__)
+
 def get_reserved_preds_from_coq_static_lib(coq_static_lib_path):
     finput = codecs.open(coq_static_lib_path, 'r', 'utf-8')
     type_definitions = \
@@ -174,13 +176,18 @@ def resolve_types_rec(expr, signature=None):
         signature = defaultdict(list)
     try:
         signature = convert_to_multitypes(expr.typecheck(), expr)
-    except InconsistentTypeHierarchyException as e:
+    except InconsistentTypeHierarchyException as ex:
         if isinstance(expr, ConstantExpression) or \
            isinstance(expr, AbstractVariableExpression):
             signature = convert_to_multitypes(expr.typecheck(), expr)
         else:
             signature = expr.visit(lambda e: resolve_types_rec(e, signature),
                                    lambda parts: combine_signatures_safe(parts))
+    except Exception as ex:
+        # recover from other failures
+        my_logger.error(f"{ex} for {expr}")
+        signature = defaultdict(list)
+        
     return signature
 
 def make_new_pred_name(pred, pred_type):

@@ -161,9 +161,8 @@ def semantic_parse_sentence(sentence_ind):
             # from pudb import set_trace; set_trace()
             sentence_surf = ' '.join(sentence.xpath('tokens/token/@surf'))
             lock.acquire()
-            logging.error('An error occurred: {0}\nSentence: {1}\nTree XML:\n{2}'.format(
-                e, sentence_surf,
-                etree.tostring(sentence, encoding='utf-8', pretty_print=True).decode('utf-8')))
+            logging.error('An error occurred: {0}\nSentence: {1}\n'.format(
+                e, sentence_surf))
             lock.release()
             # print('x', end='', file=sys.stdout)
             sys.stdout.flush()
