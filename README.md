@@ -1,11 +1,9 @@
-# 0 Architecture
+# 0 Introduction
 
-This repository made the following improvements to [the original architecture](./ORIG_README.md):
-* Adapted the original file-based Python programs to memory-based scikit-learn Pipelines
-* Peplaced hard-coded dependences on external NLTK or COG resources with environment variables
-* Upgraded the code base to Python 3.10
+This repository adapts [the original Python scripts](./ORIG_README.md) to [Scikit-Learn transformers](https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html) such that 
+they can be configured and composed through an uniform interface.
 
-A working scikit-learn pipeline can be found [here](./pipelines/pipe_entail.py).
+[This example](./tests/pipe_entail.py) illustrates they can be composed into a [Scikit-Learn Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html):
 
 ```
     basic_pipe = Pipeline([
@@ -23,13 +21,26 @@ A working scikit-learn pipeline can be found [here](./pipelines/pipe_entail.py).
         ("proof_visual", CCGTreeVisualizer(output_suffix="pro")),
         ("pivot", "passthrough")
         ])
+
+    input_file = args.input_file
+    basic_pipe.set_params(corpus_writer__input_file=input_file)
+    parse_data = basic_pipe.transform(input_file)
 ```
 
-This pipeline produces the same results as [the bash script](./pipelines/pipe_entail.bash), but 
+The pipeline accepts an input file of sentences, and produces [parse data](ccg2lamp/pipelines/data_types.py) that contain sentence tokens, CCG parse tree, logic formulas, and COQ proof scripts.
+
+The pipeline saves the intermediate XML and HTML files derived from the input file with the writer steps.
+
+The writer steps are controlled by the global logging level. 
+They are turned off if the logging level is greater than DEBUG.
+
+The pipeline produces the same files as [the bash script](./tests/pipe_entail.bash), but 
 it runs ~3.5x faster.
 
-The bottleneck of the pipeline is the C&C CCG parser, which is still file based, because we don't have its
-source code.
+The bottleneck of the pipeline is the C&C CCG parser, which is a Linux executable that accepts and produces files.
+
+A pipeline can be constructed from a Python dictionary or a json file by a PipeFactory, as illustrated in [this example](ccg2lamp/pipelines/pipe_factory.py).
+
 
 # 1 Installation
 
@@ -53,24 +64,24 @@ Install the repository and dependences into a Python virtual environment:
 ```
 git clone git@github.com:pymeadow/ccg2lambda_pipe.git
 
-python3 -m venv ../../py_environs/ccg2lambda
+python -m venv ../../py_environs/ccg2lambda
 source ../../py_environs/ccg2lambda/bin/activate
 
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-Download NLTK resources for English:
+Download the NLTK resources for English:
 
 ```
-python3 -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4'); nltk.download('punkt')"
+python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4'); nltk.download('punkt')"
 cd ~/nltk_data/tokenizer
 /usr/bin/unzip punkt.zip
 ```
 
-Note that you don't have to unzip wordnet or omw, as the relevant NLTK API can work with zip files.
+Note that you don't have to unzip the `wordnet` or `omw-1.4` files, as the relevant NLTK modules can work with them.
 
 By default, these resource files are saved under folder `~/nltk_data`.
-You can move these files to different folder.
+Please set environment variable [NLTK_DATA](https://www.nltk.org/data.html), if necessary, so the pipeline can find the resources. 
 
 ## 1.3 Install COQ
 
@@ -81,50 +92,47 @@ The Coq Proof Assistant, version 8.6 (October 2017)
 compiled on Oct 28 2017 14:23:55 with OCaml 4.05.0
 ```
 
-Move file `coqlib.v` that contains the tactics for textual entailment to a folder you choose:
+`resources/coq_entail/coqlib.vo` was compiled by `cogc` and is ready to use by `coqtop`.
 
-```
-mkdir coq_entail
-mv coqlib.v coq_entail
-```
-
-Compile `coqlib.v` to a COQ module that can be loaded by `coqtop`:
-
-```
-coqc coq_entail/coqlib.v
-
-ls -l coq_entail
-12146 coqlib.glob
-21217 coqlib.vo
-1316  .coqlib.vo.aux
-```
 
 ## 1.4 Install C&C Parser
 
 ```
-./en/install_candc.sh
-Setting en/parser_location.txt pointing to .../ccg2lambda_pipe/candc-1.00
+./ccg2lamp/en/install_candc.sh
 ```
 
 # 2 Validation Tests
 
-Make necessary changes to the environment variables in [the bash pipeline](pipelines/pipeline.bash), if 
-you chose different NLTK or COG folders than described above.
-
-Then run it on the test corpus to reproduce [the original results](./ORIG_README.md):
+## 2.1 Original tests
 
 ```
-pipelines/pip_entail.bash datasets/corpus_test/sentences.txt
+python -m ccg2lamp.scripts.run_tests
+
+----------------------------------------------------------------------
+Ran 162 tests in 1.342s
+
+OK (expected failures=3)
+
+```
+
+## 2.2 Bash Pipeline
+
+Run the bash pipeline on the test corpus to reproduce [the original results](./ORIG_README.md):
+
+```
+./tests/pip_entail.bash datasets/corpus_test/sentences.txt
 yes
 
 git status
 # no file in datasets/corpus_test/ is changed
 ```
 
+## 2.3 Scikit-Learn Pipeline
+
 Run the scikit-learn pipeline on the same input to produce identical results as the bash pipeline:
 
 ```
-python pipelines/pipe_entail.py --input_file datasets/corpus_test/sentences.txt
+PYTHONPATH=. python tests/pipe_entail.py --input_file datasets/corpus_test/sentences.txt
 yes
 
 git status

@@ -1,0 +1,1 @@
+/home/wsl_0/Projects/Repository/ccg2lambda_pipe/ccg2lamp/candc-1.00
