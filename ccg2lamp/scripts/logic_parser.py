@@ -22,7 +22,7 @@ logic_parser = LogicParser(type_check=False)
 def lexpr(formula_str):
     try:
         expr = logic_parser.parse(formula_str)
+        return expr
     except LogicalExpressionException as e:
         logging.error('Failed to parse {0}. Error: {1}'.format(formula_str, e))
-        raise
-    return expr
+        return None

@@ -387,7 +387,9 @@ def parse_exprs_if_str(exprs):
     exprs_logic = []
     for expr in exprs:
         if isinstance(expr, str):
-            exprs_logic.append(lexpr(expr))
+            parsed_expr = lexpr(expr)
+            if parsed_expr is not None:
+                exprs_logic.append(parsed_expr)
         else:
             exprs_logic.append(expr)
     return exprs_logic
