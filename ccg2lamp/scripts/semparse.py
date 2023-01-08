@@ -22,10 +22,10 @@ import codecs
 import logging
 from lxml import etree
 from multiprocessing import Pool
-from multiprocessing import Lock
 import os
 import sys
 import textwrap
+import traceback
 
 from nltk.sem.logic import LogicalExpressionException
 
@@ -38,7 +38,8 @@ SEMANTIC_INDEX=None
 ARGS=None
 SENTENCES=None
 kMaxTasksPerChild=None
-lock = Lock()
+
+my_logger = logging.getLogger(__name__)
 
 def sem_parse(root):
     """extend sentence nodes with semantic nodes"""
@@ -52,7 +53,7 @@ def sem_parse(root):
     sem_nodes_lists = semantic_parse_sentences(sentence_inds, ARGS.ncores)
     assert len(sem_nodes_lists) == len(SENTENCES), \
         'Element mismatch: {0} vs {1}'.format(len(sem_nodes_lists), len(SENTENCES))
-    logging.info('Adding XML semantic nodes to sentences...')
+    my_logger.info('Adding XML semantic nodes to sentences...')
     for sentence, sem_nodes in zip(SENTENCES, sem_nodes_lists):
         sentence.extend(sem_nodes)
     
@@ -98,7 +99,7 @@ def main(args = None):
     root = deserialize_file_to_tree(ARGS.ccg)
 
     sem_parse(root)        
-    logging.info('Finished adding XML semantic nodes to sentences.')
+    my_logger.info('Finished adding XML semantic nodes to sentences.')
 
     serialize_tree_to_file(root, ARGS.sem)
 
@@ -130,7 +131,6 @@ def semantic_parse_sentence(sentence_ind):
     `sentence` is an lxml tree with tokens and ccg nodes.
     It returns an lxml semantics node.
     """
-    global lock
     sentence = SENTENCES[sentence_ind]
     sem_nodes = []
     # TODO: try to prevent semantic parsing for fragmented CCG trees.
@@ -154,18 +154,13 @@ def semantic_parse_sentence(sentence_ind):
                 sentence.xpath('./ccg[{0}]/@id'.format(tree_index))[0])
             sem_node.set('root',
                 sentence.xpath('./ccg[{0}]/@root'.format(tree_index))[0])
-            # print('.', end='', file=sys.stdout)
-            sys.stdout.flush()
         except Exception as e:
             sem_node.set('status', 'failed')
             # from pudb import set_trace; set_trace()
             sentence_surf = ' '.join(sentence.xpath('tokens/token/@surf'))
-            lock.acquire()
-            logging.error('An error occurred: {0}\nSentence: {1}\n'.format(
+            my_logger.error('An error occurred: {0}\nSentence: {1}\n'.format(
                 e, sentence_surf))
-            lock.release()
-            # print('x', end='', file=sys.stdout)
-            sys.stdout.flush()
+            #print(traceback.print_exc())
         sem_nodes.append(sem_node)
     return [etree.tostring(sem_node) for sem_node in sem_nodes]
 

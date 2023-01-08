@@ -13,10 +13,10 @@ they can be configured and composed through an uniform interface.
         ("syn_parser", CCGSynParser()),
         ("syn_writer", CCGTreeWriter(output_suffix="syn.xml", output_encode=None)),
         ("syn_visual", CCGTreeVisualizer(output_suffix="syn")),
-        ("sem_parser", CCGSemParser()),
+        ("sem_parser", CCGSemParser(nbest_output=args.nbest_output)),
         ("sem_writer", CCGTreeWriter(output_suffix="sem.xml")),
         ("sem_visual", CCGTreeVisualizer(output_suffix="sem")),
-        ("entail_prover", COQEntailmentProver()),
+        ("entail_prover", COQEntailmentProver(do_abduction=args.do_abduction)),
         ("proof_writer", CCGTreeWriter(output_suffix="pro.xml")),
         ("proof_visual", CCGTreeVisualizer(output_suffix="pro")),
         ("pivot", "passthrough")

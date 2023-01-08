@@ -27,6 +27,7 @@ import os
 from subprocess import TimeoutExpired
 import sys
 import textwrap
+import traceback
 
 from .semantic_tools import prove_doc
 from .utils import time_count
@@ -163,6 +164,7 @@ def prove_doc_ind(document_ind):
         file_name = tb.tb_frame.f_code.co_filename
         xml_text = etree.tostring(doc, encoding='utf-8', pretty_print=True).decode('utf-8')
         logging.error(f'Exception "{e}" from {file_name}:{line_no} for {doc_id}')
+        print(traceback.print_exc())
 
         lock.release()
         proof_node.set('status', 'failed')

@@ -20,6 +20,9 @@ my_logger = logging.getLogger(__name__)
 def main():
     parser = argparse.ArgumentParser(description="Textual Entailment Pipeline")
     parser.add_argument("--input_file", help="input corpus file", type=str)
+    parser.add_argument("--nbest_output", help="nbest semantic output", type=int, default=0)
+    # no, naive, spsa
+    parser.add_argument("--do_abduction", help="apply abduction to entailment", type=str, default="no")
     parser.add_argument("--log_level", help="log level", type=str, default="DEBUG")
     args = parser.parse_args()
     config_log(args.log_level)
@@ -32,10 +35,10 @@ def main():
         ("syn_parser", CCGSynParser()),
         ("syn_writer", CCGTreeWriter(output_suffix="syn.xml", output_encode=None)),
         ("syn_visual", CCGTreeVisualizer(output_suffix="syn")),
-        ("sem_parser", CCGSemParser()),
+        ("sem_parser", CCGSemParser(nbest_output=args.nbest_output)),
         ("sem_writer", CCGTreeWriter(output_suffix="sem.xml")),
         ("sem_visual", CCGTreeVisualizer(output_suffix="sem")),
-        ("entail_prover", COQEntailmentProver()),
+        ("entail_prover", COQEntailmentProver(do_abduction=args.do_abduction)),
         ("proof_writer", CCGTreeWriter(output_suffix="pro.xml")),
         ("proof_visual", CCGTreeVisualizer(output_suffix="pro")),
         ("pivot", "passthrough")

@@ -401,7 +401,9 @@ class MasterTheorem(Theorem):
         timeout = 100 if args is None else args.timeout
         theorems = []
         for semantics in generate_semantics_from_doc(doc, 100, use_gold_trees):
-            formulas = [sem.xpath('./span[1]/@sem')[0] for sem in semantics]
+            formulas = [sem.xpath('./span[1]/@sem')[0] if len(sem) > 0
+                        else "EMPTY"
+                        for sem in semantics]
             assert formulas and len(formulas) > 1
             dynamic_library_str, formulas = get_dynamic_library_from_doc(doc, semantics)
             premises, conclusion = formulas[:-1], formulas[-1]
@@ -488,9 +490,10 @@ def generate_semantics_from_doc(doc, max_gen=1, use_gold_trees=False, min_senten
         # from pudb import set_trace; set_trace()
         if i >= max_gen:
             return
-        if any(sem.get('status', 'failed') != 'success' for sem in sems):
+        # accept partial result if at least one sentence has valid semantics
+        if all(sem.get('status', 'failed') != 'success' for sem in sems):
             continue
-        if any(sem.xpath('./span[1]/@sem')[0] is None for sem in sems):
+        if all(sem.xpath('./span[1]/@sem') is None for sem in sems):
             continue
         i += 1
         yield sems
