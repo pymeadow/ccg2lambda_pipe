@@ -144,7 +144,6 @@ def prove_doc_ind(document_ind):
     proof_node = etree.Element('proof')
     inference_result = 'unknown'
     try:
-        import pudb; pudb.set_trace()
         theorem = prove_doc(doc, ABDUCTION, ARGS)
         proof_node.set('status', 'success')
         inference_result = theorem.result

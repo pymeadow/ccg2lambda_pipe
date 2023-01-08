@@ -19,6 +19,7 @@ class CCGTree():
                  use_gold_trees: bool = False,
                  max_sentences: int = 100,
                  min_sentences: int = 1):
+        assert root is not None
         self.ccg_tree = root
         self.max_sentences = max_sentences
         self.min_sentences = min_sentences
@@ -30,6 +31,9 @@ class CCGTree():
         to derive the composite context without reparsing 
         the sentences
         """
+        if ccg_tree is None or ccg_tree is self:
+            return self
+
         # copy-on-write the tree, so it can be rejoined
         merged_tree = copy.deepcopy(self.ccg_tree)
         merged_sentences = merged_tree.xpath('//sentences')[0]
