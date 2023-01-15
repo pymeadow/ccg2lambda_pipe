@@ -16,7 +16,6 @@ class CCGSynParser(TransformerMixin):
     """Adapt C&C parser to scikit-learn transformer"""
     def __init__(self, config_file: str = None,
                  parser_printer: str = "xml",
-                 log_file: str = None,
                  output_dir: str = None):
 
         # figure out the command to run the parser
@@ -25,37 +24,38 @@ class CCGSynParser(TransformerMixin):
         self.config_file = config_file
         self.model_path = ccg2lamp.CCG2LAMP_PARSER_MODEL
         self.parser_printer = parser_printer
-        self.log_file = log_file
         self.output_dir = output_dir
 
         if self.config_file:
             config_option = f"--config {self.config_file}"
         else:
             config_option = ""
-        if self.log_file:
-            log_option = f"--log {self.log_file}"
-        else:
-            log_option = ""
         
         if self.output_dir and not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir, exist_ok=True)
 
         # prepare the commands to run
         input_file = "{0}"
-        output_file = "{1}"
-        self.ccg_parse = (f"{self.parser_exe} {config_option} {log_option} " + 
+        log_file = "{1}"
+        output_file = "{2}"
+        self.ccg_parse = (f"{self.parser_exe} {config_option} " + 
                           f"--models {self.model_path} " +
                           f"--candc-printer {self.parser_printer} " +
-                          f"--input {input_file} --output {output_file}")
+                          f"--input {input_file} --log {log_file} --output {output_file}")
     
     @time_count
     def transform(self, input_file: str) -> ParseData:
         """parse tokenized sentences to XML trees"""
         assert os.path.exists(input_file)
 
+        # figure out total sentences in the input_file
+        with open(input_file, "r") as fp:
+            total_sentences = sum([len(line.strip()) > 0
+                                   for line in fp.readlines()])
+
         # figure out where to save the output from the input
         input_root = os.path.basename(input_file).split(".")[0]
-        
+
         # save the output files to a given dir or the input folder
         if self.output_dir:
             output_dir = self.output_dir
@@ -65,14 +65,18 @@ class CCGSynParser(TransformerMixin):
         output_file = f"{input_root}.{self.parser_name}.{self.parser_printer}"
         output_file = os.path.join(output_dir, output_file)
 
-        # run the external parsers with the files
-        parse_command = shlex.split(self.ccg_parse.format(input_file, output_file))
+        # figure out the log file from the input file
+        log_file = f"{input_root}.{self.parser_name}.log"
+        log_file = os.path.join(output_dir, log_file)
+
+        # run the external parsers with the input, log and output files
+        parse_command = shlex.split(self.ccg_parse.format(input_file, log_file, output_file))
         try:
             completed_process = subprocess.run(parse_command, check=True, 
                                                stdout=subprocess.DEVNULL,
                                                stderr=subprocess.STDOUT)
             # transccg_root is the root element, not the entire document
-            transccg_root, encoding = translate_candc_tree(output_file, self.log_file)
+            transccg_root, encoding = translate_candc_tree(total_sentences, output_file, log_file)
             parse_data = ParseData(parse_result=transccg_root, 
                                    parse_encode=encoding,
                                    input_file=input_file,

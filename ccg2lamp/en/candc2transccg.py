@@ -187,32 +187,33 @@ def get_failed_inds_from_log(log_fname):
                 failed_inds.add(failed_index)
     return failed_inds
 
-def translate_candc_tree(xml_fname, log_fname):
+def translate_candc_tree(total_sentences, xml_fname, log_fname):
     """translate C&C parse tree to CCG tree"""
     failed_inds = set()
     if log_fname:
+        # failed_inds is 1-based
         failed_inds = get_failed_inds_from_log(log_fname)
         logging.debug('Found failures: {0}'.format(failed_inds))
 
     xml_tree = deserialize_file_to_tree(xml_fname)
     root = xml_tree.getroot()
     ccg_trees = root.findall('ccg')
+    ccg_index = 0
 
     transccg_trees = []
-    sentence_num = 1
-    for ccg_tree in ccg_trees:
-        while sentence_num in failed_inds:
+    for sentence_num in range(1, total_sentences + 1):
+        if sentence_num in failed_inds:
             # Make empty sentence node if C&C failed to parse.
             transccg_tree = etree.Element('sentence')
-            transccg_trees.append(transccg_tree)
-            sentence_num += 1
-            logging.debug('Make dummy node.')
-        transccg_tree = candc_to_transccg(ccg_tree, sentence_num - 1)
+            logging.debug(f'Make dummy node for sentence {sentence_num}')
+        else:
+            # Translate C&C parse tree
+            transccg_tree = candc_to_transccg(ccg_trees[ccg_index], sentence_num - 1)
+            ccg_index += 1
+            logging.debug(f'Translate CCG tree for sentence {sentence_num}')
         transccg_trees.append(transccg_tree)
-        sentence_num += 1
 
-    # default to stderr
-    logging.debug('Produced {0} transccg trees'.format(len(transccg_trees)))
+    assert len(transccg_trees) == total_sentences
     transccg_xml_tree = make_transccg_xml_tree(transccg_trees)
     return transccg_xml_tree, xml_tree.docinfo.encoding
 

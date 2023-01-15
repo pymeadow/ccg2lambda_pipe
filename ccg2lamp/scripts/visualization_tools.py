@@ -178,7 +178,8 @@ def convert_doc_to_mathml(doc, use_gold_trees=False):
         sem_trees = sentence.xpath('./semantics')
         tokens = sentence.xpath('./tokens')
         if not tokens:
-            return mathml_str
+            mathml_str += f"<p>{sentence_label}: no tokens</p>\n"
+            continue
         tokens = tokens[0]
         assert len(ccg_trees) >= len(sem_trees)
         for i in range(len(ccg_trees)):
