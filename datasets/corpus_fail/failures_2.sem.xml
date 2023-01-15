@@ -150,7 +150,20 @@
         </ccg>
         <semantics status="failed"/>
       </sentence>
-      <sentence/>
+      <sentence>
+        <tokens>
+          <token start="0" span="1" id="t3_0" surf="Two"/>
+          <token start="1" span="1" id="t3_1" surf="puppies"/>
+          <token start="2" span="1" id="t3_2" surf="bite"/>
+          <token start="3" span="1" id="t3_3" surf="their"/>
+          <token start="4" span="1" id="t3_4" surf="mother"/>
+          <token start="5" span="1" id="t3_5" surf=","/>
+          <token start="6" span="1" id="t3_6" surf="while"/>
+          <token start="7" span="1" id="t3_7" surf="she"/>
+          <token start="8" span="1" id="t3_8" surf="pants"/>
+          <token start="9" span="1" id="t3_9" surf="."/>
+        </tokens>
+      </sentence>
       <sentence>
         <tokens>
           <token start="0" span="1" pos="DT" chunk="I-NP" entity="O" cat="NP[nb]/N" id="t4_0" surf="A" base="a"/>
@@ -177,7 +190,21 @@
           <span id="s4_sp6" sem="\O.O"/>
         </semantics>
       </sentence>
-      <sentence/>
+      <sentence>
+        <tokens>
+          <token start="0" span="1" id="t5_0" surf="The"/>
+          <token start="1" span="1" id="t5_1" surf="man"/>
+          <token start="2" span="1" id="t5_2" surf="directed"/>
+          <token start="3" span="1" id="t5_3" surf="the"/>
+          <token start="4" span="1" id="t5_4" surf="clean"/>
+          <token start="5" span="1" id="t5_5" surf="up"/>
+          <token start="6" span="1" id="t5_6" surf="crew"/>
+          <token start="7" span="1" id="t5_7" surf="where"/>
+          <token start="8" span="1" id="t5_8" surf="to"/>
+          <token start="9" span="1" id="t5_9" surf="go"/>
+          <token start="10" span="1" id="t5_10" surf="."/>
+        </tokens>
+      </sentence>
     </sentences>
   </document>
 </root>

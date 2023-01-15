@@ -187,7 +187,21 @@ def get_failed_inds_from_log(log_fname):
                 failed_inds.add(failed_index)
     return failed_inds
 
-def translate_candc_tree(total_sentences, xml_fname, log_fname):
+def make_token_sentence(sentence_id, token_sentence):
+    """create a sentence node with its tokens"""
+    transccg_tree = etree.Element('sentence')
+    tokens_parent = etree.Element('tokens')
+    transccg_tree.append(tokens_parent)
+    for start, token in enumerate(token_sentence.split()):
+        token_node = etree.Element('token')
+        token_node.set("start", str(start))
+        token_node.set("span", "1")
+        token_node.set("id", f"t{sentence_id}_{start}")
+        token_node.set("surf", token)
+        tokens_parent.append(token_node)
+    return transccg_tree
+
+def translate_candc_tree(token_sentences, xml_fname, log_fname):
     """translate C&C parse tree to CCG tree"""
     failed_inds = set()
     if log_fname:
@@ -201,10 +215,12 @@ def translate_candc_tree(total_sentences, xml_fname, log_fname):
     ccg_index = 0
 
     transccg_trees = []
+    total_sentences = len(token_sentences)
     for sentence_num in range(1, total_sentences + 1):
         if sentence_num in failed_inds:
-            # Make empty sentence node if C&C failed to parse.
-            transccg_tree = etree.Element('sentence')
+            # Make sentence node with just tokens
+            transccg_tree = make_token_sentence(sentence_num - 1, 
+                                                token_sentences[sentence_num - 1])
             logging.debug(f'Make dummy node for sentence {sentence_num}')
         else:
             # Translate C&C parse tree

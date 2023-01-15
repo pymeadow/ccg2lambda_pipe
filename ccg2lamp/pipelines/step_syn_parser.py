@@ -48,10 +48,10 @@ class CCGSynParser(TransformerMixin):
         """parse tokenized sentences to XML trees"""
         assert os.path.exists(input_file)
 
-        # figure out total sentences in the input_file
+        # load the token sentences in case the parses fail
         with open(input_file, "r") as fp:
-            total_sentences = sum([len(line.strip()) > 0
-                                   for line in fp.readlines()])
+            token_sentences = [line for line in fp.readlines()
+                               if len(line.strip()) > 0]
 
         # figure out where to save the output from the input
         input_root = os.path.basename(input_file).split(".")[0]
@@ -76,7 +76,7 @@ class CCGSynParser(TransformerMixin):
                                                stdout=subprocess.DEVNULL,
                                                stderr=subprocess.STDOUT)
             # transccg_root is the root element, not the entire document
-            transccg_root, encoding = translate_candc_tree(total_sentences, output_file, log_file)
+            transccg_root, encoding = translate_candc_tree(token_sentences, output_file, log_file)
             parse_data = ParseData(parse_result=transccg_root, 
                                    parse_encode=encoding,
                                    input_file=input_file,
