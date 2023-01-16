@@ -238,14 +238,14 @@
           <span start="6" span="1" pos="." chunk="O" entity="O" id="s4_sp12" surf="." base="." terminal="t4_6" category="."/>
         </ccg>
         <semantics status="success" ccg_id="s4_ccg0" root="s4_sp0">
-          <span id="s4_sp0" child="s4_sp1 s4_sp12" sem="exists x.(_diner(x) &amp; TrueP &amp; exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8)))"/>
-          <span id="s4_sp1" child="s4_sp2 s4_sp5" sem="exists x.(_diner(x) &amp; TrueP &amp; exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8)))"/>
+          <span id="s4_sp0" child="s4_sp1 s4_sp12" sem="exists x.(_diner(x) &amp; TrueP &amp; exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5)))"/>
+          <span id="s4_sp1" child="s4_sp2 s4_sp5" sem="exists x.(_diner(x) &amp; TrueP &amp; exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5)))"/>
           <span id="s4_sp2" child="s4_sp3 s4_sp4" sem="\F2 F3.exists x.(_diner(x) &amp; F2(x) &amp; F3(x))"/>
           <span id="s4_sp3" sem="\F1 F2 F3.exists x.(F1(x) &amp; F2(x) &amp; F3(x))"/>
           <span id="s4_sp4" sem="\x._diner(x)" type="_diner : Entity -&gt; Prop"/>
-          <span id="s4_sp5" child="s4_sp6 s4_sp7" sem="\Q.Q(\w.TrueP,\x.exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8)))"/>
+          <span id="s4_sp5" child="s4_sp6 s4_sp7" sem="\Q.Q(\w.TrueP,\x.exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5)))"/>
           <span id="s4_sp6" sem="\F Q.Q(\w.TrueP,F)"/>
-          <span id="s4_sp7" child="s4_sp8 s4_sp9" sem="\x.exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8))"/>
+          <span id="s4_sp7" child="s4_sp8 s4_sp9" sem="\x.exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5))"/>
           <span id="s4_sp8" sem="\Q x.Q(\w.TrueP,\y._at(x,y))" type="_at : Entity -&gt; Entity -&gt; Prop"/>
           <span id="s4_sp9" child="s4_sp10 s4_sp11" sem="\F2 F3.exists x.(_restaurant(x) &amp; F2(x) &amp; F3(x))"/>
           <span id="s4_sp10" sem="\F1 F2 F3.exists x.(F1(x) &amp; F2(x) &amp; F3(x))"/>
@@ -270,7 +270,7 @@
             <premise>exists x.(_people(x) &amp; TrueP &amp; _be(x) &amp; exists z1.(_omelette(z1) &amp; TrueP &amp; Prog(_eat(x,z1))))</premise>
             <premise>exists x.(_people(x) &amp; TrueP &amp; _be(x) &amp; exists z5.(_school(z5) &amp; TrueP &amp; _in(x,z5) &amp; exists z3.(_desk(z3) &amp; TrueP &amp; _at(x,z3) &amp; Prog(_sit(x)))))</premise>
           </premises>
-          <conclusion>exists x.(_diner(x) &amp; TrueP &amp; exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8)))</conclusion>
+          <conclusion>exists x.(_diner(x) &amp; TrueP &amp; exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5)))</conclusion>
           <dynamic_library>Parameter _at : Entity -&gt; (Entity -&gt; Prop).
 Parameter _be : Entity -&gt; Prop.
 Parameter _desk : Entity -&gt; Prop.
@@ -281,10 +281,10 @@ Parameter _omelette : Entity -&gt; Prop.
 Parameter _restaurant : Entity -&gt; Prop.
 Parameter _school : Entity -&gt; Prop.
 Parameter _sit : Entity -&gt; Prop.</dynamic_library>
-          <direct_definition> -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8)))))</direct_definition>
-          <reverse_definition>(exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt;  -&gt; </reverse_definition>
-          <direct_definition_neg> -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (not (exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8))))))</direct_definition_neg>
-          <reverse_definition_neg>(not (exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt;  -&gt; </reverse_definition_neg>
+          <direct_definition> -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5)))))</direct_definition>
+          <reverse_definition>(exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt;  -&gt; </reverse_definition>
+          <direct_definition_neg> -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (not (exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5))))))</direct_definition_neg>
+          <reverse_definition_neg>(not (exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt;  -&gt; </reverse_definition_neg>
           <theorem inference_result="unknown" is_negated="False">
             <coq_script>Require Export coqlib.
 Parameter _at : Entity -&gt; (Entity -&gt; Prop).
@@ -297,7 +297,7 @@ Parameter _omelette : Entity -&gt; Prop.
 Parameter _restaurant : Entity -&gt; Prop.
 Parameter _school : Entity -&gt; Prop.
 Parameter _sit : Entity -&gt; Prop.
-Theorem t1:  -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.</coq_script>
+Theorem t1:  -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.</coq_script>
             <failure_log type_error="unk" open_formula="unk"/>
           </theorem>
           <theorem inference_result="unknown" is_negated="True">
@@ -312,7 +312,7 @@ Parameter _omelette : Entity -&gt; Prop.
 Parameter _restaurant : Entity -&gt; Prop.
 Parameter _school : Entity -&gt; Prop.
 Parameter _sit : Entity -&gt; Prop.
-Theorem t1:  -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (not (exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8)))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.</coq_script>
+Theorem t1:  -&gt;  -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -&gt; (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -&gt; (not (exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5)))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.</coq_script>
             <failure_log type_error="unk" open_formula="unk"/>
           </theorem>
         </theorems>

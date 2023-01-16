@@ -23,6 +23,7 @@ import re
 import os
 import sys
 import textwrap
+from typing import List
 
 from ccg2lamp.scripts.xml_utils import deserialize_file_to_tree
 
@@ -187,12 +188,12 @@ def get_failed_inds_from_log(log_fname):
                 failed_inds.add(failed_index)
     return failed_inds
 
-def make_token_sentence(sentence_id, token_sentence):
+def make_token_sentence(sentence_id, token_sentence: List[str]):
     """create a sentence node with its tokens"""
     transccg_tree = etree.Element('sentence')
     tokens_parent = etree.Element('tokens')
     transccg_tree.append(tokens_parent)
-    for start, token in enumerate(token_sentence.split()):
+    for start, token in enumerate(token_sentence):
         token_node = etree.Element('token')
         token_node.set("start", str(start))
         token_node.set("span", "1")
@@ -233,6 +234,11 @@ def translate_candc_tree(token_sentences, xml_fname, log_fname):
     transccg_xml_tree = make_transccg_xml_tree(transccg_trees)
     return transccg_xml_tree, xml_tree.docinfo.encoding
 
+def read_token_file(token_fname):
+    with open(token_fname, "r") as fp:
+        token_sentences = [line.split() for line in fp.readlines()
+                           if len(line.strip()) > 0]
+    return token_sentences
 
 def main(args=None):
     DESCRIPTION=textwrap.dedent("""\
@@ -245,6 +251,7 @@ def main(args=None):
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=DESCRIPTION)
+    parser.add_argument("token_fname", help="File with tokenized sentences.")
     parser.add_argument("xml_fname", help="XML input filename with C&C trees.")
     parser.add_argument("log_fname", nargs='?', default="",
         help="C&C log file that signals parsing failures.")
@@ -262,7 +269,9 @@ def main(args=None):
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
-    transccg_xml_tree, encoding = translate_candc_tree(args.xml_fname, args.log_fname)
+    # read the token sentences into the memory
+    token_sentences = read_token_file(args.token_fname)
+    transccg_xml_tree, encoding = translate_candc_tree(token_sentences, args.xml_fname, args.log_fname)
     result = etree.tostring(transccg_xml_tree, xml_declaration=True,
                             encoding=encoding, pretty_print=True)
     print(result.decode('utf-8'))

@@ -32,7 +32,8 @@ class COQEntailmentProver(TransformerMixin):
 
     @time_count
     def transform(self, parse_data: ParseData) -> ParseData:
-        prove_entail(parse_data.parse_result)
+        if parse_data.parse_result is not None:
+            prove_entail(parse_data.parse_result)
         # return parse data as is because it was not changed
         return parse_data
 

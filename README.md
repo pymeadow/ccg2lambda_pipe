@@ -9,7 +9,6 @@ they can be configured and composed through an uniform interface.
     basic_pipe = Pipeline([
         ("corpus_reader", CorpusReader()),
         ("en_tokenizer", WordTokenizer()),
-        ("corpus_writer", CorpusWriter()),
         ("syn_parser", CCGSynParser()),
         ("syn_writer", CCGTreeWriter(output_suffix="syn.xml", output_encode=None)),
         ("syn_visual", CCGTreeVisualizer(output_suffix="syn")),
@@ -23,7 +22,7 @@ they can be configured and composed through an uniform interface.
         ])
 
     input_file = args.input_file
-    basic_pipe.set_params(corpus_writer__input_file=input_file)
+    basic_pipe.set_params(syn_parser__input_file=input_file)
     parse_data = basic_pipe.transform(input_file)
 ```
 
@@ -120,7 +119,7 @@ OK (expected failures=3)
 Run the bash pipeline on the test corpus to reproduce [the original results](./ORIG_README.md):
 
 ```
-./tests/pip_entail.bash datasets/corpus_test/sentences.txt
+./tests/pipe_entail.bash datasets/corpus_test/sentences.txt
 yes
 
 git status

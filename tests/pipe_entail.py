@@ -31,7 +31,6 @@ def main():
     basic_pipe = Pipeline([
         ("corpus_reader", CorpusReader()),
         ("en_tokenizer", WordTokenizer()),
-        ("corpus_writer", CorpusWriter()),
         ("syn_parser", CCGSynParser()),
         ("syn_writer", CCGTreeWriter(output_suffix="syn.xml", output_encode=None)),
         ("syn_visual", CCGTreeVisualizer(output_suffix="syn")),
@@ -46,7 +45,7 @@ def main():
     
     # "datasets/corpus_test/sentences.txt"
     input_file = args.input_file
-    basic_pipe.set_params(corpus_writer__input_file=input_file)
+    basic_pipe.set_params(syn_parser__input_file=input_file)
     parse_data = basic_pipe.transform(input_file)
     my_logger.info(f"{input_file} => {parse_data}")
 

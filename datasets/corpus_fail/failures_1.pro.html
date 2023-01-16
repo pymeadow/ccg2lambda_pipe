@@ -1501,7 +1501,7 @@
 </mrow>
 </mfrac>
 </mrow></mrow>
-  <mrow><mtext  fontsize='1.0' color='Blue'>\x.exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8))</mtext>
+  <mrow><mtext  fontsize='1.0' color='Blue'>\x.exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5))</mtext>
 </mrow>
 </mfrac>
 </mrow>
@@ -1515,7 +1515,7 @@
 </mrow>
 </mfrac>
 </mrow></mrow>
-  <mrow><mtext  fontsize='1.0' color='Blue'>\Q.Q(\w.TrueP,\x.exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8)))</mtext>
+  <mrow><mtext  fontsize='1.0' color='Blue'>\Q.Q(\w.TrueP,\x.exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5)))</mtext>
 </mrow>
 </mfrac>
 </mrow>
@@ -1528,7 +1528,7 @@
 </mrow>
 </mfrac>
 </mrow></mrow>
-  <mrow><mtext  fontsize='1.0' color='Blue'>exists x.(_diner(x) &amp; TrueP &amp; exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8)))</mtext>
+  <mrow><mtext  fontsize='1.0' color='Blue'>exists x.(_diner(x) &amp; TrueP &amp; exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5)))</mtext>
 </mrow>
 </mfrac>
 <mfrac linethickness='0px'>
@@ -1551,7 +1551,7 @@
 </mrow>
 </mfrac>
 </mrow></mrow>
-  <mrow><mtext  fontsize='1.0' color='Blue'>exists x.(_diner(x) &amp; TrueP &amp; exists z8.(_restaurant(z8) &amp; TrueP &amp; _at(x,z8)))</mtext>
+  <mrow><mtext  fontsize='1.0' color='Blue'>exists x.(_diner(x) &amp; TrueP &amp; exists z5.(_restaurant(z5) &amp; TrueP &amp; _at(x,z5)))</mtext>
 </mrow>
 </mfrac>
 </math>
@@ -1568,7 +1568,7 @@ Parameter _omelette : Entity -> Prop.
 Parameter _restaurant : Entity -> Prop.
 Parameter _school : Entity -> Prop.
 Parameter _sit : Entity -> Prop.
-Theorem t1:  ->  -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -> (exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.
+Theorem t1:  ->  -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -> (exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.
 </pre>
 <pre>
 Require Export coqlib.
@@ -1582,7 +1582,7 @@ Parameter _omelette : Entity -> Prop.
 Parameter _restaurant : Entity -> Prop.
 Parameter _school : Entity -> Prop.
 Parameter _sit : Entity -> Prop.
-Theorem t1:  ->  -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -> (not (exists x, (and (and (_diner x) True) (exists z8, (and (and (_restaurant z8) True) (_at x z8)))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.
+Theorem t1:  ->  -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z1, (and (and (_omelette z1) True) (Prog (_eat x z1)))))) -> (exists x, (and (and (and (_people x) True) (_be x)) (exists z5, (and (and (and (_school z5) True) (_in x z5)) (exists z3, (and (and (and (_desk z3) True) (_at x z3)) (Prog (_sit x)))))))) -> (not (exists x, (and (and (_diner x) True) (exists z5, (and (and (_restaurant z5) True) (_at x z5)))))). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.
 </pre>
     </body>
     </html>

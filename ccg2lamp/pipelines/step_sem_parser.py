@@ -33,7 +33,8 @@ class CCGSemParser(TransformerMixin):
     @time_count
     def transform(self, parse_data: ParseData) -> ParseData:
         # this will extend the parse tree with semantic nodes
-        sem_parse(parse_data.parse_result)
+        if parse_data.parse_result is not None:
+            sem_parse(parse_data.parse_result)
         # so we can just return the parse data as is
         return parse_data
 

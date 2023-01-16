@@ -20,10 +20,11 @@ token_file=$input_dir/$input_file.tok.txt
 cat $INPUT_PATH | python -m ccg2lamp.en.tokenizer > $token_file
 
 candc_xml=$input_dir/$input_file.candc.xml
-./candc-1.00/bin/candc --models candc-1.00/models --candc-printer xml --input $token_file > $candc_xml
+candc_log=$input_dir/$input_file.candc.log
+./candc-1.00/bin/candc --models candc-1.00/models --log $candc_log --candc-printer xml --input $token_file > $candc_xml
 
 parse_xml=$input_dir/$input_file.syn.xml
-python -m ccg2lamp.en.candc2transccg $candc_xml > $parse_xml
+python -m ccg2lamp.en.candc2transccg $token_file $candc_xml > $parse_xml
 
 parse_html=$input_dir/${input_file}.syn.html
 python -m ccg2lamp.scripts.visualize $parse_xml > $parse_html
