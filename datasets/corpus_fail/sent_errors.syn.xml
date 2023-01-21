@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <document>
+    <sentences>
+      <sentence>
+        <tokens>
+          <token start="0" span="1" pos="DT" chunk="I-NP" entity="O" cat="NP[nb]/N" id="t0_0" surf="A" base="a"/>
+          <token start="1" span="1" pos="NN" chunk="I-NP" entity="O" cat="N" id="t0_1" surf="bike" base="bike"/>
+          <token start="2" span="1" pos="PRP" chunk="B-NP" entity="O" cat="NP" id="t0_2" surf="it" base="it"/>
+          <token start="3" span="1" pos="RB" chunk="I-ADVP" entity="O" cat="(NP\NP)\NP" id="t0_3" surf="outside" base="outside"/>
+        </tokens>
+        <ccg root="s0_sp0" id="s0_ccg0">
+          <span root="true" id="s0_sp0" child="s0_sp1 s0_sp4" pos="None" category="NP" rule="ba"/>
+          <span id="s0_sp1" child="s0_sp2 s0_sp3" pos="None" category="NP[nb=true]" rule="fa"/>
+          <span start="0" span="1" pos="DT" chunk="I-NP" entity="O" id="s0_sp2" surf="A" base="a" terminal="t0_0" category="NP[nb=true]/N"/>
+          <span start="1" span="1" pos="NN" chunk="I-NP" entity="O" id="s0_sp3" surf="bike" base="bike" terminal="t0_1" category="N"/>
+          <span id="s0_sp4" child="s0_sp5 s0_sp6" pos="None" category="NP\NP" rule="ba"/>
+          <span start="2" span="1" pos="PRP" chunk="B-NP" entity="O" id="s0_sp5" surf="it" base="it" terminal="t0_2" category="NP"/>
+          <span start="3" span="1" pos="RB" chunk="I-ADVP" entity="O" id="s0_sp6" surf="outside" base="outside" terminal="t0_3" category="(NP\NP)\NP"/>
+        </ccg>
+      </sentence>
+    </sentences>
+  </document>
+</root>
+

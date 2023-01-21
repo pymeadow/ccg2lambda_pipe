@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="candc.xml"?>
+
+<candc>
+<ccg>
+ <rule type="ba" cat="NP">
+  <rule type="fa" cat="NP[nb]">
+   <lf start="0" span="1" word="A" lemma="a" pos="DT" chunk="I-NP" entity="O" cat="NP[nb]/N" />
+   <lf start="1" span="1" word="bike" lemma="bike" pos="NN" chunk="I-NP" entity="O" cat="N" />
+  </rule>
+  <rule type="ba" cat="NP\NP">
+   <lf start="2" span="1" word="it" lemma="it" pos="PRP" chunk="B-NP" entity="O" cat="NP" />
+   <lf start="3" span="1" word="outside" lemma="outside" pos="RB" chunk="I-ADVP" entity="O" cat="(NP\NP)\NP" />
+  </rule>
+ </rule>
+</ccg>
+</candc>

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+  <document>
+    <sentences>
+      <sentence>
+        <tokens>
+          <token start="0" span="1" id="t0_0" surf="Two"/>
+          <token start="1" span="1" id="t0_1" surf="puppies"/>
+          <token start="2" span="1" id="t0_2" surf="bite"/>
+          <token start="3" span="1" id="t0_3" surf="their"/>
+          <token start="4" span="1" id="t0_4" surf="mother"/>
+          <token start="5" span="1" id="t0_5" surf=","/>
+          <token start="6" span="1" id="t0_6" surf="while"/>
+          <token start="7" span="1" id="t0_7" surf="she"/>
+          <token start="8" span="1" id="t0_8" surf="pants"/>
+          <token start="9" span="1" id="t0_9" surf="."/>
+        </tokens>
+      </sentence>
+      <sentence>
+        <tokens>
+          <token start="0" span="1" id="t1_0" surf="The"/>
+          <token start="1" span="1" id="t1_1" surf="is"/>
+          <token start="2" span="1" id="t1_2" surf="a"/>
+          <token start="3" span="1" id="t1_3" surf="single"/>
+          <token start="4" span="1" id="t1_4" surf="sculpture"/>
+          <token start="5" span="1" id="t1_5" surf="."/>
+        </tokens>
+      </sentence>
+      <sentence>
+        <tokens>
+          <token start="0" span="1" id="t2_0" surf="The"/>
+          <token start="1" span="1" id="t2_1" surf="man"/>
+          <token start="2" span="1" id="t2_2" surf="directed"/>
+          <token start="3" span="1" id="t2_3" surf="the"/>
+          <token start="4" span="1" id="t2_4" surf="clean"/>
+          <token start="5" span="1" id="t2_5" surf="up"/>
+          <token start="6" span="1" id="t2_6" surf="crew"/>
+          <token start="7" span="1" id="t2_7" surf="where"/>
+          <token start="8" span="1" id="t2_8" surf="to"/>
+          <token start="9" span="1" id="t2_9" surf="go"/>
+          <token start="10" span="1" id="t2_10" surf="."/>
+        </tokens>
+      </sentence>
+    </sentences>
+  </document>
+</root>
+
