@@ -51,6 +51,6 @@ if __name__ == "__main__":
     parse_data = sem_parser.transform(parse_data)
     output = tree_writer.transform(parse_data)
     print("output=", output)
-    assert output.output_file == "datasets/corpus_test/sentences.sem.xml"                      
+    assert output.output_file == "datasets/corpus_fail/sem_fail.sem.xml"                      
             
         

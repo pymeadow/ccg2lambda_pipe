@@ -31,7 +31,7 @@ class PartialExpression(Expression):
         self.exp_list = exp_list
     
     def applyto(self, other):
-        return self
+        return self + other
 
     def constants(self):
         return []
@@ -72,8 +72,9 @@ class PartialExpression(Expression):
     def visit(self, *args):
         return self
 
-    def __add__(self, pe_object):
-        self.exp_list += pe_object.exp_list
+    def __add__(self, other):
+        self.exp_list += other.exp_list
+        return self
 
     def __str__(self):
         return PE_PRE + PE_DEL.join(self.exp_list)
