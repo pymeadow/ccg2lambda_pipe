@@ -156,6 +156,15 @@ def semantic_parse_sentence(sentence_ind):
                 sentence.xpath('./ccg[{0}]/@root'.format(tree_index))[0])
         except Exception as e:
             sem_node.set('status', 'failed')
+            sem_node.set('ccg_id', f"s{sentence_ind}_ccg0")
+            root_id = f"s{sentence_ind}_sp0"
+            sem_node.set('root', root_id)
+            # add a special child span node with EMPTY formula
+            empty_span = etree.Element("span")
+            empty_span.set("id", root_id)
+            empty_span.set("sem", "EMPTY")
+            sem_node.append(empty_span)
+
             # from pudb import set_trace; set_trace()
             sentence_surf = ' '.join(sentence.xpath('tokens/token/@surf'))
             my_logger.error('An error occurred: {0}\nSentence: {1}\n'.format(

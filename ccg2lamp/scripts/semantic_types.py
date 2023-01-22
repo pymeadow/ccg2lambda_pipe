@@ -344,9 +344,7 @@ def get_dynamic_library_from_doc(doc, semantics_nodes):
     nltk_sigs_arbi = [convert_coq_signatures_to_nltk(coq_lib) for coq_lib in coq_libs]
     nltk_sig_arbi = combine_signatures(nltk_sigs_arbi)
 
-    formulas = [sem.xpath('./span[1]/@sem')[0] if len(sem) > 0
-                else "EMPTY"
-                for sem in semantics_nodes]
+    formulas = [sem.xpath('./span[1]/@sem')[0] for sem in semantics_nodes]
     formulas = parse_exprs_if_str(formulas)
     nltk_sig_auto, formulas = combine_signatures_or_rename_preds(formulas, nltk_sigs_arbi)
     # coq_static_lib_path is useful to get reserved predicates.

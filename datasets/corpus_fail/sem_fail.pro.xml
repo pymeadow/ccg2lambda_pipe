@@ -459,9 +459,7 @@
         <semantics status="failed"/>
       </sentence>
     </sentences>
-    <proof status="success" inference_result="unknown">
-      <master_theorem/>
-    </proof>
+    <proof status="failed" inference_result="unknown"/>
   </document>
 </root>
 

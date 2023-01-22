@@ -130,7 +130,7 @@ def make_rule_pattern_from_ccg_node(ccg_tree, tokens):
 def find_node_by_id(node_id, xml_tree):
     nodes = xml_tree.xpath('.//descendant-or-self::*[@id="%s"]' % node_id)
     if not nodes:
-        raise(ValueError('It should have found a span for id {0}'.format(node_id)))
+        raise(ValueError(f'It should have found a span for id {node_id} in {xml_tree}'))
     return nodes[0]
 
 def load_semantic_rules(fn):
