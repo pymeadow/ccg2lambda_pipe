@@ -175,7 +175,7 @@ def convert_doc_to_mathml(doc, use_gold_trees=False):
             sentence_label = 'Conclusion'
         sentence_text = get_surf_from_xml_node(sentence)
         ccg_trees = sentence.xpath('./ccg')
-        sem_trees = sentence.xpath('./semantics')
+        sem_trees = sentence.xpath('./semantics[@status="success"]')
         tokens = sentence.xpath('./tokens')
         if len(ccg_trees) == 0:
             # display only the tokens, if the parse failed

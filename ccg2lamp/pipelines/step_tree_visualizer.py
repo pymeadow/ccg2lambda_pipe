@@ -7,7 +7,7 @@ from logging import FileHandler
 
 from sklearn.base import TransformerMixin
 
-from .data_types import ParseData
+from ccg2lamp.pipelines.data_types import ParseData
 from ccg2lamp.scripts.visualize import visualize_parse_tree
 
 my_logger = logging.getLogger(__name__)
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     tree_reader = CCGTreeReader()
     tree_visualizer = CCGTreeVisualizer(output_suffix="syn")
     
-    input_file = "datasets/corpus_test/sentences.syn.xml"
+    input_file = "datasets/corpus_fail/sem_fail_nochild.sem.xml"
     parse_data = tree_reader.transform(input_file)
     parse_data = tree_visualizer.transform(parse_data)
     print(f"{input_file} => {parse_data}")

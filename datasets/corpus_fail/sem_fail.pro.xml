@@ -61,7 +61,9 @@
           <span start="15" span="1" pos="NN" chunk="I-NP" entity="O" id="s0_sp35" surf="work" base="work" terminal="t0_15" category="N"/>
           <span start="16" span="1" pos="." chunk="O" entity="O" id="s0_sp36" surf="." base="." terminal="t0_16" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s0_ccg0" root="s0_sp0">
+          <span id="s0_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -117,7 +119,9 @@
           <span start="14" span="1" pos="NN" chunk="I-NP" entity="O" id="s1_sp31" surf="juice" base="juice" terminal="t1_14" category="N"/>
           <span start="15" span="1" pos="." chunk="O" entity="O" id="s1_sp32" surf="." base="." terminal="t1_15" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s1_ccg0" root="s1_sp0">
+          <span id="s1_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -177,7 +181,9 @@
           <span start="15" span="1" pos="PRP" chunk="I-NP" entity="O" id="s2_sp34" surf="them" base="they" terminal="t2_15" category="NP"/>
           <span start="16" span="1" pos="." chunk="O" entity="O" id="s2_sp35" surf="." base="." terminal="t2_16" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s2_ccg0" root="s2_sp0">
+          <span id="s2_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -217,7 +223,9 @@
           <span start="9" span="1" pos="NN" chunk="I-NP" entity="O" id="s3_sp20" surf="street" base="street" terminal="t3_9" category="N"/>
           <span start="10" span="1" pos="." chunk="O" entity="O" id="s3_sp21" surf="." base="." terminal="t3_10" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s3_ccg0" root="s3_sp0">
+          <span id="s3_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -265,7 +273,9 @@
           <span start="11" span="1" pos="IN" chunk="I-PP" entity="O" id="s4_sp26" surf="in" base="in" terminal="t4_11" category="PP/(S[adj=true]\NP)"/>
           <span start="12" span="1" pos="JJ" chunk="I-NP" entity="O" id="s4_sp27" surf="red" base="red" terminal="t4_12" category="S[adj=true]\NP"/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s4_ccg0" root="s4_sp0">
+          <span id="s4_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -323,7 +333,9 @@
           <span start="15" span="1" pos="NN" chunk="I-NP" entity="O" id="s5_sp32" surf="girlfriend" base="girlfriend" terminal="t5_15" category="N"/>
           <span start="16" span="1" pos="." chunk="O" entity="O" id="s5_sp33" surf="." base="." terminal="t5_16" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s5_ccg0" root="s5_sp0">
+          <span id="s5_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -354,7 +366,9 @@
           <span start="6" span="1" pos="NN" chunk="I-NP" entity="O" id="s6_sp14" surf="lake" base="lake" terminal="t6_6" category="N"/>
           <span start="7" span="1" pos="." chunk="O" entity="O" id="s6_sp15" surf="." base="." terminal="t6_7" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s6_ccg0" root="s6_sp0">
+          <span id="s6_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -403,7 +417,9 @@
           <span start="12" span="1" pos="NN" chunk="I-NP" entity="O" id="s7_sp26" surf="stream" base="stream" terminal="t7_12" category="N"/>
           <span start="13" span="1" pos="." chunk="O" entity="O" id="s7_sp27" surf="." base="." terminal="t7_13" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s7_ccg0" root="s7_sp0">
+          <span id="s7_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
       <sentence>
         <tokens>
@@ -456,10 +472,56 @@
           <span start="13" span="1" pos="NN" chunk="I-NP" entity="O" id="s8_sp29" surf="stream" base="stream" terminal="t8_13" category="N"/>
           <span start="14" span="1" pos="." chunk="O" entity="O" id="s8_sp30" surf="." base="." terminal="t8_14" category="."/>
         </ccg>
-        <semantics status="failed"/>
+        <semantics status="failed" ccg_id="s8_ccg0" root="s8_sp0">
+          <span id="s8_sp0" sem="EMPTY"/>
+        </semantics>
       </sentence>
     </sentences>
-    <proof status="failed" inference_result="unknown"/>
+    <proof status="success" inference_result="unknown">
+      <master_theorem>
+        <theorems>
+          <parser_labels>
+            <parser_label ccg_id="s0_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s1_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s2_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s3_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s4_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s5_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s6_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s7_ccg0" ccg_parser="None"/>
+            <parser_label ccg_id="s8_ccg0" ccg_parser="None"/>
+          </parser_labels>
+          <premises>
+            <premise>EMPTY</premise>
+            <premise>EMPTY</premise>
+            <premise>EMPTY</premise>
+            <premise>EMPTY</premise>
+            <premise>EMPTY</premise>
+            <premise>EMPTY</premise>
+            <premise>EMPTY</premise>
+            <premise>EMPTY</premise>
+          </premises>
+          <conclusion>EMPTY</conclusion>
+          <dynamic_library/>
+          <direct_definition> -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt; </direct_definition>
+          <reverse_definition> -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt; </reverse_definition>
+          <direct_definition_neg> -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt; (not )</direct_definition_neg>
+          <reverse_definition_neg>(not ) -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt; </reverse_definition_neg>
+          <theorem inference_result="unknown" is_negated="False">
+            <coq_script>Require Export coqlib.
+
+Theorem t1:  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt; . Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.</coq_script>
+            <failure_log type_error="unk" open_formula="unk"/>
+          </theorem>
+          <theorem inference_result="unknown" is_negated="True">
+            <coq_script>Require Export coqlib.
+
+Theorem t1:  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt;  -&gt; (not ). Set Firstorder Depth 1. nltac. Set Firstorder Depth 6. nltac. Qed.</coq_script>
+            <failure_log type_error="unk" open_formula="unk"/>
+          </theorem>
+        </theorems>
+      </master_theorem>
+    </proof>
   </document>
 </root>
 
