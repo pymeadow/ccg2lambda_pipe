@@ -8,7 +8,7 @@ from ccg2lamp.scripts.utils import time_count
 import ccg2lamp.scripts.semparse as semparse
 from ccg2lamp.scripts.semparse import sem_parse
 
-from .data_types import ParseData
+from ccg2lamp.pipelines.data_types import ParseData
 
 my_logger = logging.getLogger(__name__)
 
@@ -46,8 +46,8 @@ if __name__ == "__main__":
 
     tree_reader = CCGTreeReader()
     tree_writer = CCGTreeWriter(output_suffix="sem.xml", output_encode="utf-8")
-    parse_data = tree_reader.transform("datasets/corpus_test/sentences.syn.xml")
-    sem_parser = CCGSemParser()   
+    parse_data = tree_reader.transform("datasets/corpus_fail/sem_fail.syn.xml")
+    sem_parser = CCGSemParser(use_ncores=0)   
     parse_data = sem_parser.transform(parse_data)
     output = tree_writer.transform(parse_data)
     print("output=", output)

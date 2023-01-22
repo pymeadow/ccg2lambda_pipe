@@ -79,6 +79,7 @@ class SemanticIndex(object):
                 ccg_tree.set('coq_type', "")
         elif len(ccg_tree) == 1:
             predicate = lexpr(ccg_tree[0].get('sem'))
+            print(f"predicate={predicate}")
             semantics = semantic_template(predicate).simplify()
             # Assign coq types.
             ccg_tree.set('coq_type', ccg_tree[0].attrib.get('coq_type', ""))

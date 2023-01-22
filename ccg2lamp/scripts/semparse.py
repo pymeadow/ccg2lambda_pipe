@@ -163,7 +163,7 @@ def semantic_parse_sentence(sentence_ind):
 
             sentence_surf = ' '.join(sentence.xpath('tokens/token/@surf'))
             my_logger.debug(f'Semantic parse failed with: {e}\nSentence: {sentence_surf}\n')
-            #print(traceback.print_exc())
+            print(traceback.print_exc())
 
         sem_node.set('ccg_id', ccg_tree)
         sem_node.set('root', ccg_root)
