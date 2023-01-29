@@ -23,14 +23,17 @@ from nltk.sem.logic import LogicalExpressionException
 my_logger = logging.getLogger(__name__)
 
 PE_PRE = "PE:"
-PE_DEL = ";"
+PE_DEL = "|"
 
 class PartialExpression(Expression):
     """Store fragments of valid expressions that cannot be composed"""
     def __init__(self, exp_list):
+        # exp_list: List[Expression]
         self.exp_list = exp_list
     
     def applyto(self, other):
+        # support function application: self(other)
+        # called by: parent.__call__(other)
         return self + other
 
     def constants(self):
@@ -73,14 +76,38 @@ class PartialExpression(Expression):
         return self
 
     def __add__(self, other):
-        self.exp_list += other.exp_list
+        assert isinstance(other, Expression)
+        if isinstance(other, PartialExpression):
+            self.exp_list += other.exp_list
+        else:
+            self.exp_list.append(other)
         return self
 
     def __str__(self):
-        return PE_PRE + PE_DEL.join(self.exp_list)
+        return PE_PRE + PE_DEL.join(map(str, self.exp_list))
 
 def is_partial_expression(formula_str):
     return formula_str[: len(PE_PRE)] == PE_PRE
+
+def combine_partial_expressions(function: Expression, argument: Expression):
+    # combine function with argument if one of them is PartialExpression
+    if isinstance(function, PartialExpression):
+        function += argument
+        return function
+    if isinstance(argument, PartialExpression):
+        argument += function
+        return argument
+    return None
+
+def recover_partial_expressions(evaluation, function, argument):
+    # check if evaluation is valid
+    if lexpr(str(evaluation)):
+        # the expression is valid as it can be parsed
+        return evaluation
+    else:
+        # the expression is invalid, recover its parts
+        evaluation = PartialExpression([function, argument])
+        return evaluation
 
 logic_parser = LogicParser(type_check=False)
 def lexpr(formula_str):

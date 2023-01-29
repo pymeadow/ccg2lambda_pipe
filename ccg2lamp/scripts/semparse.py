@@ -148,13 +148,12 @@ def semantic_parse_sentence(sentence_ind):
         ccg_root = sentence.xpath(f'./ccg[{tree_index}]/@root')[0]
 
         try:
-            sem_tree = assign_semantics_to_ccg(
-                sentence, SEMANTIC_INDEX, tree_index)
+            status, sem_tree = assign_semantics_to_ccg(sentence, SEMANTIC_INDEX, tree_index)
             filter_attributes(sem_tree)
             sem_node.extend(sem_tree.xpath('.//descendant-or-self::span'))
-            sem_node.set('status', 'success')
+            sem_node.set('status', 'success' if status else "partial")
         except Exception as e:
-            # add a special child span node with EMPTY formula
+            # on complete failure: add a special child span node with EMPTY formula
             empty_span = etree.Element("span")
             empty_span.set("id", f"s{sentence_ind}_sp0")
             empty_span.set("sem", "EMPTY")

@@ -21,9 +21,10 @@ import yaml
 
 from .category import Category
 from .etree_utils import get_node_at_path
-from .logic_parser import lexpr
+from .logic_parser import lexpr, combine_partial_expressions
 from .normalization import normalize_token
 from .semantic_rule import SemanticRule
+from ccg2lamp.scripts.logic_parser import recover_partial_expressions
 
 class SemanticIndex(object):
     def __init__(self, contents):
@@ -69,7 +70,13 @@ class SemanticIndex(object):
                       rule_pattern.attributes)
             predicate_string = base if base != '*' else surf
             predicate = lexpr(predicate_string)
-            semantics = semantic_template(predicate).simplify()
+
+            # robust semantic composition
+            semantics = combine_partial_expressions(semantic_template, predicate)
+            if not semantics:
+                semantics = semantic_template(predicate).simplify()
+            semantics = recover_partial_expressions(semantics, semantic_template, predicate)
+
             # Assign coq types.
             if semantic_rule != None and 'coq_type' in semantic_rule.attributes:
                 coq_types = semantic_rule.attributes['coq_type']
@@ -79,8 +86,13 @@ class SemanticIndex(object):
                 ccg_tree.set('coq_type', "")
         elif len(ccg_tree) == 1:
             predicate = lexpr(ccg_tree[0].get('sem'))
-            print(f"predicate={predicate}")
-            semantics = semantic_template(predicate).simplify()
+
+            # robust semantic composition
+            semantics = combine_partial_expressions(semantic_template, predicate)
+            if not semantics:
+                semantics = semantic_template(predicate).simplify()
+            semantics = recover_partial_expressions(semantics, semantic_template, predicate)
+
             # Assign coq types.
             ccg_tree.set('coq_type', ccg_tree[0].attrib.get('coq_type', ""))
         else:
@@ -90,12 +102,22 @@ class SemanticIndex(object):
             for path in var_paths:
                 child_node = get_node_at_path(ccg_tree, path)
                 child_semantics = lexpr(child_node.get('sem'))
-                semantics = semantics(child_semantics).simplify()
+
+                # robust semantic composition
+                partial_semantics = combine_partial_expressions(semantics, child_semantics)
+                if partial_semantics:
+                    semantics = partial_semantics
+                else:
+                    full_semantics = semantics(child_semantics).simplify()
+                    semantics = recover_partial_expressions(full_semantics, semantics, child_semantics)
+
                 child_coq_types = child_node.get('coq_type', None)
                 if child_coq_types is not None and child_coq_types != "":
                     coq_types_list.append(child_coq_types)
             if coq_types_list:
                 ccg_tree.set('coq_type', ' ||| '.join(coq_types_list))
+                
+        assert lexpr(str(semantics)) is not None
         return semantics
 
 def get_attributes_from_ccg_node_recursively(ccg_tree, tokens):

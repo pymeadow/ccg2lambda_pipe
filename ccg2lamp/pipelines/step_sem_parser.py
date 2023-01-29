@@ -40,6 +40,7 @@ class CCGSemParser(TransformerMixin):
 
 # unit test
 if __name__ == "__main__":
+    import os
     from ccg2lamp.pipelines.step_tree_io import CCGTreeReader, CCGTreeWriter
     
     logging.basicConfig(level=logging.DEBUG)
@@ -51,6 +52,6 @@ if __name__ == "__main__":
     parse_data = sem_parser.transform(parse_data)
     output = tree_writer.transform(parse_data)
     print("output=", output)
-    assert output.output_file == "datasets/corpus_fail/sem_fail.sem.xml"                      
+    assert os.path.basename(output.output_file) == "sem_fail.sem.xml"                  
             
         

@@ -18,8 +18,8 @@
           <span start="2" span="1" pos="PRP" chunk="B-NP" entity="O" id="s0_sp5" surf="it" base="it" terminal="t0_2" category="NP"/>
           <span start="3" span="1" pos="RB" chunk="I-ADVP" entity="O" id="s0_sp6" surf="outside" base="outside" terminal="t0_3" category="(NP\NP)\NP"/>
         </ccg>
-        <semantics status="success" ccg_id="s0_ccg0" root="s0_sp0">
-          <span id="s0_sp0" child="s0_sp1 s0_sp4" sem="\F2.exists x.(\F3.exists z1.(_bike(z1) &amp; x(z1) &amp; F3(z1)) &amp; F2(x))"/>
+        <semantics status="partial" ccg_id="s0_ccg0" root="s0_sp0">
+          <span id="s0_sp0" child="s0_sp1 s0_sp4" sem="PE:\F1 F2.exists x.(F1(x) &amp; F2(x))|\F2 F3.exists x.(_bike(x) &amp; F2(x) &amp; F3(x))"/>
           <span id="s0_sp1" child="s0_sp2 s0_sp3" sem="\F2 F3.exists x.(_bike(x) &amp; F2(x) &amp; F3(x))"/>
           <span id="s0_sp2" sem="\F1 F2 F3.exists x.(F1(x) &amp; F2(x) &amp; F3(x))"/>
           <span id="s0_sp3" sem="\x._bike(x)" type="_bike : Entity -&gt; Prop"/>

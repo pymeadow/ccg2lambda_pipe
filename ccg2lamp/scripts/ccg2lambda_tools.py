@@ -21,9 +21,12 @@ import simplejson
 from lxml import etree
 from nltk.sem.logic import ConstantExpression
 
-from .logic_parser import lexpr, PartialExpression
 from .normalization import normalize_token
 from . import semantic_index
+from ccg2lamp.scripts.logic_parser import (lexpr, 
+                                           PartialExpression, 
+                                           combine_partial_expressions, 
+                                           recover_partial_expressions)
 
 def build_ccg_tree(ccg_xml, root_id=None):
     """
@@ -92,8 +95,8 @@ def assign_semantics_to_ccg(ccg_xml, semantic_index, tree_index=1):
     ccg_tree = build_ccg_tree(ccg_flat_tree)
     tokens = copy.deepcopy(ccg_xml.find('.//tokens'))
     tokens = normalize_tokens(tokens)
-    assign_semantics(ccg_tree, semantic_index, tokens)
-    return ccg_tree
+    status = assign_semantics(ccg_tree, semantic_index, tokens)
+    return status, ccg_tree
 
 def is_forward_operation(ccg_tree):
     rule = ccg_tree.get('rule')
@@ -163,7 +166,8 @@ def combine_children_exprs(ccg_tree, tokens, semantic_index):
     semantics = semantic_index.get_semantic_representation(ccg_tree, tokens)
     if semantics:
         ccg_tree.set('sem', str(semantics))
-        return True
+        return not isinstance(semantics, PartialExpression)
+
     # Back-off mechanism in case no semantic templates are available:
     if is_forward_operation(ccg_tree):
         function_index, argument_index = 0, 1
@@ -173,15 +177,11 @@ def combine_children_exprs(ccg_tree, tokens, semantic_index):
     argument = lexpr(ccg_tree[argument_index].attrib['sem'])
 
     # check if any child is a partial expression
-    if isinstance(function, PartialExpression):
-        function += str(argument)
-        ccg_tree.set("sem", str(function))
+    partial_exp = combine_partial_expressions(function, argument)
+    if partial_exp:
+        ccg_tree.set("sem", str(partial_exp))
         return False
-    if isinstance(argument, PartialExpression):
-        argument += str(function)
-        ccg_tree.set("sem", str(argument))
-        return False
-
+        
     combination_operation = get_combination_op(ccg_tree)
     if combination_operation == 'function_application':
         evaluation = function(argument).simplify()
@@ -192,8 +192,12 @@ def combine_children_exprs(ccg_tree, tokens, semantic_index):
     else:
         assert False, 'This node should be a function application or combination'\
                       .format(etree.tostring(ccg_tree, pretty_print=True))
+    
+    # nltk may produce invalid logic expressions itself cannot parse
+    # we check such expressions before assign them to the node
+    evaluation = recover_partial_expressions(evaluation, function, argument)
     ccg_tree.set('sem', str(evaluation))
-    return True
+    return not isinstance(evaluation, PartialExpression)
 
 def assign_semantics(ccg_tree, semantic_index, tokens):
     """
@@ -202,22 +206,22 @@ def assign_semantics(ccg_tree, semantic_index, tokens):
     """
     category = ccg_tree.attrib['category']
     if len(ccg_tree) == 0:
+        # assign semantics to a leaf (lexical node)
         semantics = semantic_index.get_semantic_representation(ccg_tree, tokens)
         ccg_tree.set('sem', str(semantics))
-        return True
+        return not isinstance(semantics, PartialExpression)
+
     if len(ccg_tree) == 1:
+        # assign semantics to a node with a single child
         assign_semantics(ccg_tree[0], semantic_index, tokens)
         semantics = semantic_index.get_semantic_representation(ccg_tree, tokens)
         ccg_tree.set('sem', str(semantics))
-        return True
+        return not isinstance(semantics, PartialExpression)
+
     for child in ccg_tree:
+        # recurse into more than one child
         assign_semantics(child, semantic_index, tokens)
-        
-    try:
-        status = combine_children_exprs(ccg_tree, tokens, semantic_index)
-    except Exception as exc:
-        # the combination of children failed, record the partial semantics
-        partial_exp = PartialExpression([ccg_tree[0].get("sem"), ccg_tree[1].get("sem")])
-        ccg_tree.set("sem", str(partial_exp))
-        status = False
+    
+    # combine two children into their parent
+    status = combine_children_exprs(ccg_tree, tokens, semantic_index)
     return status
