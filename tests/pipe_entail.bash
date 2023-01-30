@@ -30,7 +30,7 @@ parse_html=$input_dir/${input_file}.syn.html
 python -m ccg2lamp.scripts.visualize $parse_xml > $parse_html
 
 sem_xml=$input_dir/$input_file.sem.xml
-python -m ccg2lamp.scripts.semparse $parse_xml ccg2lamp/en/semantic_templates_en_emnlp2015.yaml $sem_xml
+python -m ccg2lamp.scripts.semparse $parse_xml ccg2lamp/en/semantic_templates_en_emnlp2015.yaml $sem_xml --ncores=0
 
 sem_html=$input_dir/${input_file}.sem.html
 python -m ccg2lamp.scripts.visualize $sem_xml > $sem_html

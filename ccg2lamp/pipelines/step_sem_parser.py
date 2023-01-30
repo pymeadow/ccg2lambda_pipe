@@ -17,7 +17,7 @@ class CCGSemParser(TransformerMixin):
     def __init__(self, arbitrary_types: bool = False, # for --arbi-types
                  gold_trees: bool = False, # for --gold-trees
                  nbest_output: int = 0, # for --nbest
-                 use_ncores: int = 3 # for --ncores
+                 use_ncores: int = 0 # for --ncores
                  ):
         
         self.model_path = ccg2lamp.CCG2LAMP_SEM_TEMPLATE
