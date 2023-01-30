@@ -49,7 +49,7 @@ The semantic analysis component was enhanced to return partial logic formulas, w
 
 A partial logic formula consists of a list of well-formed logic formulas (fragments) that cannot be composed into well-formed formulas.
 
-Some examples of partial analyses can be found at [here](datasets/corpus_fail/sem_fail.pro.html).
+Some examples of partial analyses can be found at [here](https://htmlpreview.github.io/?https://github.com/pymeadow/ccg2lambda_pipe/blob/recover_partial_semantics/datasets/corpus_fail/sem_fail.sem.html).
 
 # 1 Installation
 
