@@ -1,6 +1,10 @@
 # 0 Introduction
 
-This repository adapts [the original Python scripts](./ORIG_README.md) to [Scikit-Learn transformers](https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html) such that 
+This repository made the following improvements to the [the original ccg2lambda](./ORIG_README.md).
+
+## 0.1 Scikit-Learn Pipelines
+The original Python programs were adapted
+to [Scikit-Learn transformers](https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html) such that 
 they can be configured and composed through an uniform interface.
 
 [This example](./tests/pipe_entail.py) illustrates they can be composed into a [Scikit-Learn Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html):
@@ -40,6 +44,12 @@ The bottleneck of the pipeline is the C&C CCG parser, which is a Linux executabl
 
 A pipeline can be constructed from a Python dictionary or a json file by a PipeFactory, as illustrated in [this example](ccg2lamp/pipelines/pipe_factory.py).
 
+## 0.2 Partial Semantics
+The semantic analysis component was enhanced to return partial logic formulas, when a complete semantic analysis fails.
+
+A partial logic formula consists of a list of well-formed logic formulas (fragments) that cannot be composed into well-formed formulas.
+
+Some examples of partial analyses can be found at [here](datasets/corpus_fail/sem_fail.pro.html).
 
 # 1 Installation
 
@@ -102,7 +112,7 @@ compiled on Oct 28 2017 14:23:55 with OCaml 4.05.0
 
 # 2 Validation Tests
 
-## 2.1 Original tests
+## 2.1 Original Tests
 
 ```
 python -m ccg2lamp.scripts.run_tests
@@ -114,27 +124,18 @@ OK (expected failures=3)
 
 ```
 
-## 2.2 Bash Pipeline
+## 2.2 Pipeline Tests
 
-Run the bash pipeline on the test corpus to reproduce [the original results](./ORIG_README.md):
+Run the Scikit-Learn pipelines on the test corpora to reproduce the result files:
 
 ```
-./tests/pipe_entail.bash datasets/corpus_test/sentences.txt
-yes
+find . -name eval_*.bash -exec {} \;
 
+# all the result files are updated
+ls -lt datasets/corpus_fail
+ls -lt datasets/corpus_test
+
+# but no file has been changed
 git status
-# no file in datasets/corpus_test/ is changed
-```
-
-## 2.3 Scikit-Learn Pipeline
-
-Run the scikit-learn pipeline on the same input to produce identical results as the bash pipeline:
 
 ```
-PYTHONPATH=. python tests/pipe_entail.py --input_file datasets/corpus_test/sentences.txt
-yes
-
-git status
-# no file in datasets/corpus_test/ is changed
-```
-
