@@ -485,13 +485,11 @@ def generate_semantics_from_doc(doc, max_gen=1, use_gold_trees=False, min_senten
 
     i = 0
     for sems in itertools.product(*semantics_lists):
+        assert all(sem.xpath('./span[1]/@sem') for sem in sems)
         # from pudb import set_trace; set_trace()
         if i >= max_gen:
             return
-        if any(sem.get('status', 'failed') != 'success' for sem in sems):
-            continue
-        if any(sem.xpath('./span[1]/@sem')[0] is None for sem in sems):
-            continue
+        # accept partial result if at least one sentence has valid semantics
         i += 1
         yield sems
     if i == 0:

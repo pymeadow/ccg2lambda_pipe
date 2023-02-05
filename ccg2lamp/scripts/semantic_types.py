@@ -41,9 +41,10 @@ from nltk.sem.logic import Variable
 from nltk.sem.logic import typecheck
 
 from .knowledge import get_tokens_from_xml_node
-from .logic_parser import lexpr
+from .logic_parser import lexpr, PartialExpression
 from .normalization import normalize_token, substitute_invalid_chars
 from .tree_tools import tree_or_string
+from _ast import Or
 
 my_logger = logging.getLogger(__name__)
 
@@ -245,6 +246,18 @@ def replace_function_names(expr, resolution_guide, active=None):
         exprs = [replace_function_names(e, resolution_guide, active) for e in child_exprs]
         expr.variable = exprs[0]
         expr.term = exprs[1]
+    elif isinstance(expr, PartialExpression):
+        # take all the usable fragments
+        child_exprs = [exp for exp in expr.exp_list
+                          if (isinstance(exp, ConstantExpression) or 
+                              isinstance(exp, NegatedExpression) or 
+                              isinstance(exp, BinaryExpression) or
+                              isinstance(exp, ApplicationExpression) or
+                              isinstance(exp, VariableBinderExpression))]
+        exprs = [replace_function_names(e, resolution_guide, active) for e in child_exprs]
+        if len(exprs) > 2:
+            expr.variable = exprs[0]
+            expr.term = exprs[1]       
     else:
         raise NotImplementedError(
             'Expression not recognized: {0}, type: {1}'.format(expr, type(expr)))

@@ -6,7 +6,7 @@ from sklearn.base import TransformerMixin
 class CorpusReader(TransformerMixin):
     """read raw corpus into memory"""
     def __init__(self, min_length: int = 1):
-        self.min_length = min_length
+        self.min_length = max([min_length, 1])
     
     def transform(self, file_name: str) -> List[str]:
         sentences = []
@@ -14,7 +14,7 @@ class CorpusReader(TransformerMixin):
             lines = input_file.readlines()
             for line in lines:
                 sent = line.strip()
-                if len(sent) >= self.min_length:
+                if len(sent) >= self.min_length and sent[0] != "#":
                     sentences.append(sent)
         return sentences
 

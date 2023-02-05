@@ -23,6 +23,7 @@ import re
 import os
 import sys
 import textwrap
+from typing import List
 
 from ccg2lamp.scripts.xml_utils import deserialize_file_to_tree
 
@@ -187,35 +188,57 @@ def get_failed_inds_from_log(log_fname):
                 failed_inds.add(failed_index)
     return failed_inds
 
-def translate_candc_tree(xml_fname, log_fname):
+def make_token_sentence(sentence_id, token_sentence: List[str]):
+    """create a sentence node with its tokens"""
+    transccg_tree = etree.Element('sentence')
+    tokens_parent = etree.Element('tokens')
+    transccg_tree.append(tokens_parent)
+    for start, token in enumerate(token_sentence):
+        token_node = etree.Element('token')
+        token_node.set("start", str(start))
+        token_node.set("span", "1")
+        token_node.set("id", f"t{sentence_id}_{start}")
+        token_node.set("surf", token)
+        tokens_parent.append(token_node)
+    return transccg_tree
+
+def translate_candc_tree(token_sentences, xml_fname, log_fname):
     """translate C&C parse tree to CCG tree"""
     failed_inds = set()
     if log_fname:
+        # failed_inds is 1-based
         failed_inds = get_failed_inds_from_log(log_fname)
         logging.debug('Found failures: {0}'.format(failed_inds))
 
     xml_tree = deserialize_file_to_tree(xml_fname)
     root = xml_tree.getroot()
     ccg_trees = root.findall('ccg')
+    ccg_index = 0
 
     transccg_trees = []
-    sentence_num = 1
-    for ccg_tree in ccg_trees:
-        while sentence_num in failed_inds:
-            # Make empty sentence node if C&C failed to parse.
-            transccg_tree = etree.Element('sentence')
-            transccg_trees.append(transccg_tree)
-            sentence_num += 1
-            logging.debug('Make dummy node.')
-        transccg_tree = candc_to_transccg(ccg_tree, sentence_num - 1)
+    total_sentences = len(token_sentences)
+    for sentence_num in range(1, total_sentences + 1):
+        if sentence_num in failed_inds:
+            # Make sentence node with just tokens
+            transccg_tree = make_token_sentence(sentence_num - 1, 
+                                                token_sentences[sentence_num - 1])
+            logging.debug(f'Make dummy node for sentence {sentence_num}')
+        else:
+            # Translate C&C parse tree
+            transccg_tree = candc_to_transccg(ccg_trees[ccg_index], sentence_num - 1)
+            ccg_index += 1
+            logging.debug(f'Translate CCG tree for sentence {sentence_num}')
         transccg_trees.append(transccg_tree)
-        sentence_num += 1
 
-    # default to stderr
-    logging.debug('Produced {0} transccg trees'.format(len(transccg_trees)))
+    assert len(transccg_trees) == total_sentences
     transccg_xml_tree = make_transccg_xml_tree(transccg_trees)
     return transccg_xml_tree, xml_tree.docinfo.encoding
 
+def read_token_file(token_fname):
+    with open(token_fname, "r") as fp:
+        token_sentences = [line.split() for line in fp.readlines()
+                           if len(line.strip()) > 0]
+    return token_sentences
 
 def main(args=None):
     DESCRIPTION=textwrap.dedent("""\
@@ -228,6 +251,7 @@ def main(args=None):
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=DESCRIPTION)
+    parser.add_argument("token_fname", help="File with tokenized sentences.")
     parser.add_argument("xml_fname", help="XML input filename with C&C trees.")
     parser.add_argument("log_fname", nargs='?', default="",
         help="C&C log file that signals parsing failures.")
@@ -245,7 +269,9 @@ def main(args=None):
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
-    transccg_xml_tree, encoding = translate_candc_tree(args.xml_fname, args.log_fname)
+    # read the token sentences into the memory
+    token_sentences = read_token_file(args.token_fname)
+    transccg_xml_tree, encoding = translate_candc_tree(token_sentences, args.xml_fname, args.log_fname)
     result = etree.tostring(transccg_xml_tree, xml_declaration=True,
                             encoding=encoding, pretty_print=True)
     print(result.decode('utf-8'))
