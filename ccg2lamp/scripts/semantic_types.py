@@ -22,7 +22,7 @@ from copy import deepcopy
 import functools
 import logging
 import re
-import os
+import traceback
 
 from nltk import Tree
 from nltk.sem.logic import ENTITY_TYPE
@@ -44,7 +44,7 @@ from .knowledge import get_tokens_from_xml_node
 from .logic_parser import lexpr, PartialExpression
 from .normalization import normalize_token, substitute_invalid_chars
 from .tree_tools import tree_or_string
-from _ast import Or
+from .nltk2normal import remove_true
 
 my_logger = logging.getLogger(__name__)
 
@@ -186,7 +186,7 @@ def resolve_types_rec(expr, signature=None):
                                    lambda parts: combine_signatures_safe(parts))
     except Exception as ex:
         # recover from other failures
-        my_logger.error(f"{ex} for {expr}")
+        my_logger.debug(f"{ex} in: {expr}")
         signature = defaultdict(list)
         
     return signature
@@ -278,7 +278,7 @@ def combine_signatures_or_rename_preds(exprs, preferred_sigs=None):
         preferred_sigs = [{}] * len(exprs)
     elif isinstance(preferred_sigs, dict):
         preferred_sigs = [preferred_sigs]
-    signatures = [resolve_types_rec(expr) for expr in exprs]
+    signatures = [resolve_types_rec(remove_true(expr)) for expr in exprs]
     signature = defaultdict(list)
     for s, preferred_sig in zip(signatures, preferred_sigs):
         for pred, type_and_expr_list in s.items():

@@ -4,7 +4,7 @@ import argparse
 
 from sklearn.base import TransformerMixin
 
-from .data_types import ParseData
+from ccg2lamp.pipelines.data_types import ParseData
 
 from ccg2lamp.scripts.utils import time_count
 import ccg2lamp.scripts.prove as prover
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
     tree_reader = CCGTreeReader()
-    input_file = "datasets/corpus_test/sentences.sem.xml"
+    input_file = "datasets/corpus_fail/entail_fail.sem.xml"
     parse_data = tree_reader.transform(input_file)
     entail_prover = COQEntailmentProver()
     parse_data = entail_prover.transform(parse_data)
