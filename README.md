@@ -53,12 +53,28 @@ Some examples of partial analyses can be found at [here](https://htmlpreview.git
 
 # 1 Installation
 
+You can either use docker or install all the requirements on your local machine.
+
+## Running on docker
+Clone the repository and run the docker with commands like these:
+```shell
+git clone git@github.com:pymeadow/ccg2lambda_pipe.git
+cd ccg2lambda_pipe/docker && docker-compose up
+```
+This will setup the whole environment in a docker container and runs the pipeline on the sentences 
+which are stored in `sample_run/sentences.txt`. After a successfull run, you should be able to see
+the output files such as `sample_run/sentences.pro.html` and `sample_run/sentences.sem.html`
+
+## Installing locally
+
+You need a setup like this:
+
 * Ubuntu 18.04
 * git version 2.17.1 
 * Python 3.10.8
 * pip 22.2.2
 
-## 1.1 Prerequisites
+### 1.1 Prerequisites
 
 ```
 sudo apt-get install libxml2-dev libxslt1-dev
@@ -66,7 +82,7 @@ sudo apt-get install python3.10-venv
 sudo apt-get install zip unzip
 ```
 
-## 1.2 Install CCG2Lambda
+### 1.2 Install CCG2Lambda
 
 Install the repository and dependences into a Python virtual environment:
 
@@ -92,7 +108,7 @@ Note that you don't have to unzip the `wordnet` or `omw-1.4` files, as the relev
 By default, these resource files are saved under folder `~/nltk_data`.
 Please set environment variable [NLTK_DATA](https://www.nltk.org/data.html), if necessary, so the pipeline can find the resources. 
 
-## 1.3 Install COQ
+### 1.3 Install COQ
 
 ```
 sudo apt-get install coq
@@ -104,7 +120,7 @@ compiled on Oct 28 2017 14:23:55 with OCaml 4.05.0
 `resources/coq_entail/coqlib.vo` was compiled by `cogc` and is ready to use by `coqtop`.
 
 
-## 1.4 Install C&C Parser
+### 1.4 Install C&C Parser
 
 ```
 ./ccg2lamp/en/install_candc.sh
