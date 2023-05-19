@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  ccg2lambda_pipe:
+    build:
+      context: ../
+      dockerfile: docker/pipe.Dockerfile
+    container_name: ccg2lambda_pipe
+    volumes:
+      - ../:/ccg2lambda_pipe
+    command: 
+      - /bin/sh
+      - -c
+      - |
+       chmod +x ./candc-1.00/bin/candc
+       ls -la ./candc-1.00/bin/candc
+       bash tests/pipe_entail.bash sample_run/sentences.txt
